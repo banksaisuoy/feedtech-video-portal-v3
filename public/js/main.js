@@ -32,7 +32,28 @@ async function init() {
   await loadContentTypes();
   await loadEvents();
 
-  if (isAuthed) {
+  // Check URL parameters for Figma Showcase or direct view routing
+  const urlParams = new URLSearchParams(window.location.search);
+  const isFigmaMode = urlParams.get('mode') === 'figma' || urlParams.get('figma') === 'all' || window.location.hash === '#figma';
+  const targetView = urlParams.get('view') || window.location.hash.replace('#', '');
+
+  if (isFigmaMode) {
+    if (typeof initFigmaShowcaseMode === 'function') {
+      await initFigmaShowcaseMode();
+      return;
+    }
+  }
+
+  if (targetView && targetView !== 'figma') {
+    if (targetView.startsWith('admin')) {
+      const adminUser = state.users && state.users.find(u => u.is_admin === 1 || u.role === 'Admin');
+      if (adminUser) {
+        state.currentUser = adminUser;
+        if (typeof syncPersonaSelectUI === 'function') syncPersonaSelectUI();
+      }
+    }
+    navigateView(targetView);
+  } else if (isAuthed) {
     const isAdmin = state.currentUser && (state.currentUser.is_admin === 1 || state.currentUser.role === 'Admin');
     navigateView(isAdmin ? 'admin-dashboard' : 'home');
   } else {
