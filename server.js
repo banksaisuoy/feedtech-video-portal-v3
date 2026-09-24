@@ -12,6 +12,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Dedicated Route for Figma UI Kit Edition
+app.get('/figma', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'figma.html'));
+});
+
 // Initialize SQLite database
 const dbPath = path.join(__dirname, 'feedtech_portal.sqlite');
 const db = new DatabaseSync(dbPath);

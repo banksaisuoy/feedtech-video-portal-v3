@@ -1,0 +1,2854 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedtech Video Portal - Enterprise UX/UI Demo</title>
+  
+  <!-- Tailwind CSS CDN with forms and container queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Google Fonts: Inter & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#006c49",
+            "primary-container": "#10b981",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#00422b",
+            "primary-fixed": "#6ffbbe",
+            "primary-fixed-dim": "#4edea3",
+            "secondary": "#2b6954",
+            "secondary-container": "#adedd3",
+            "on-secondary-container": "#306d58",
+            "tertiary": "#a43a3a",
+            "tertiary-container": "#fc7c78",
+            "surface": "#ffffff",
+            "surface-dim": "#d3daea",
+            "surface-bright": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "surface-container-high": "#e2e8f8",
+            "surface-container-highest": "#dce2f3",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#4b5563",
+            "outline": "#6c7a71",
+            "outline-variant": "#e5e7eb",
+            "background": "#f8fafc",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* COLLAPSIBLE MINI SIDEBAR (ICON-ONLY MODE) */
+    #mainSidebar {
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+      overflow-x: hidden !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #mainSidebar::-webkit-scrollbar {
+      display: none;
+    }
+    #mainSidebar.collapsed {
+      width: 72px !important;
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    #mainSidebar.collapsed .sidebar-link-text,
+    #mainSidebar.collapsed .sidebar-section-title,
+    #mainSidebar.collapsed #sidebarCatChevronBtn,
+    #mainSidebar.collapsed #sidebarCategoriesSubmenu {
+      display: none !important;
+    }
+    #mainSidebar.collapsed .sidebar-section-divider {
+      display: block !important;
+    }
+    #mainSidebar.collapsed .sidebar-link {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      border-left-width: 0 !important;
+      width: 100% !important;
+    }
+    #mainSidebar.collapsed .sidebar-dropdown-group {
+      width: 100% !important;
+    }
+    #mainSidebar.collapsed #nav-categories > div:first-child {
+      justify-content: center !important;
+      width: 100% !important;
+    }
+
+    /* DARK MODE PALETTE & OVERRIDES */
+    html.dark {
+      color-scheme: dark;
+    }
+    html.dark body {
+      background-color: #090d16 !important;
+      color: #f1f5f9 !important;
+    }
+    html.dark header,
+    html.dark aside,
+    html.dark .bg-white {
+      background-color: #111827 !important;
+      border-color: #1f2937 !important;
+      color: #f3f4f6 !important;
+    }
+    html.dark #mainViewContainer,
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-100 {
+      background-color: #0b1120 !important;
+      border-color: #1f2937 !important;
+    }
+    html.dark .text-gray-900,
+    html.dark .text-gray-800 {
+      color: #f9fafb !important;
+    }
+    html.dark .text-gray-700,
+    html.dark .text-gray-600 {
+      color: #cbd5e1 !important;
+    }
+    html.dark .text-gray-500,
+    html.dark .text-gray-400 {
+      color: #94a3b8 !important;
+    }
+    html.dark .border-outline-variant,
+    html.dark .border-slate-200,
+    html.dark .border-slate-100 {
+      border-color: #1f2937 !important;
+    }
+    html.dark input,
+    html.dark select,
+    html.dark textarea {
+      background-color: #0f172a !important;
+      color: #f9fafb !important;
+      border-color: #374151 !important;
+    }
+    html.dark .sidebar-link:hover {
+      background-color: #1e293b !important;
+    }
+    html.dark #edit-drawer {
+      background-color: #111827 !important;
+      border-color: #1f2937 !important;
+    }
+    html.dark #logDetailsModal > div,
+    html.dark #userAccessModal > div,
+    html.dark #profileModal > div,
+    html.dark #eventModal > div,
+    html.dark #videoPlayerModal > div {
+      background-color: #111827 !important;
+      border-color: #1f2937 !important;
+      color: #f3f4f6 !important;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-sans antialiased h-screen flex flex-col overflow-hidden">
+
+  <!-- DEDICATED LOGIN SCREEN (DEMO AUTHENTICATION) -->
+  <div id="loginScreen" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Brand & Header -->
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-500/20 mb-2">
+          <span class="material-symbols-outlined text-3xl">play_circle</span>
+        </div>
+        <h1 class="text-2xl font-black text-gray-900 tracking-tight">Feedtech Portal</h1>
+        <p class="text-xs text-gray-500">Enterprise Video Knowledge & Streaming Platform</p>
+      </div>
+
+      <!-- Quick Demo Access Shortcuts -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm text-primary">bolt</span>
+          <span>Quick Demo Access</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="quickDemoLogin('admin')" class="py-2 px-3 bg-white border border-slate-300 hover:border-primary hover:bg-emerald-50/50 rounded-lg text-xs font-bold text-gray-800 flex items-center justify-center gap-1.5 transition-all shadow-xs">
+            <span class="text-base">👑</span>
+            <span>Demo Admin</span>
+          </button>
+          <button type="button" onclick="quickDemoLogin('user')" class="py-2 px-3 bg-white border border-slate-300 hover:border-primary hover:bg-emerald-50/50 rounded-lg text-xs font-bold text-gray-800 flex items-center justify-center gap-1.5 transition-all shadow-xs">
+            <span class="text-base">👤</span>
+            <span>Demo User</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-gray-400 text-center">Demo: Admin (admin / admin) • Staff (user / user)</p>
+      </div>
+
+      <!-- Credentials Form -->
+      <form id="loginForm" onsubmit="handleLoginFormSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" for="loginUsername">Username / User ID</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">person</span>
+            <input id="loginUsername" type="text" placeholder="admin or user" required class="w-full pl-9 pr-3 py-2.5 text-xs bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-gray-900 font-semibold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" for="loginPassword">Password</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">lock</span>
+            <input id="loginPassword" type="password" placeholder="••••••••" required class="w-full pl-9 pr-3 py-2.5 text-xs bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-gray-900 font-semibold">
+          </div>
+        </div>
+
+        <div id="loginErrorMessage" class="hidden p-2.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">error</span>
+          <span id="loginErrorText"></span>
+        </div>
+
+        <button type="submit" id="loginSubmitBtn" class="w-full py-2.5 px-4 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 transition-colors shadow-sm flex items-center justify-center gap-2 text-xs">
+          <span class="material-symbols-outlined text-sm">login</span>
+          <span>Sign In</span>
+        </button>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="pt-2 border-t border-slate-100 text-center text-[11px] text-gray-400">
+        Charoen Pokphand Foods • Feedtech Research & Video Portal
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP SIMULATION CONTROL BAR -->
+  <div id="simulationControlBar" class="bg-[#0f172a] text-white px-4 py-2 flex flex-wrap items-center justify-between text-xs z-50 border-b border-slate-700 shadow-md">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-semibold border border-emerald-500/30">
+        <span class="material-symbols-outlined text-sm">security</span>
+        <span>RBAC Simulation Mode</span>
+      </div>
+      <span class="hidden sm:inline text-slate-400">|</span>
+      <div class="flex items-center gap-2">
+        <span class="text-slate-300 font-medium">Viewing as:</span>
+        <select id="personaSelector" onchange="switchPersona(this.value)" class="bg-slate-800 text-white border border-slate-600 rounded px-2.5 py-1 text-xs font-semibold focus:ring-1 focus:ring-emerald-400 outline-none cursor-pointer">
+          <!-- Populated dynamically via JS -->
+        </select>
+      </div>
+      <button onclick="quickSwitchToAdmin()" class="flex items-center gap-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold px-2.5 py-1 rounded-md transition-all shadow-sm">
+        <span class="material-symbols-outlined text-xs">admin_panel_settings</span>
+        <span>👑 Switch to Admin</span>
+      </button>
+    </div>
+    
+    <div class="flex items-center gap-4 mt-1 sm:mt-0">
+      <div id="personaDetails" class="hidden md:flex items-center gap-2 text-slate-300">
+        <span class="px-2 py-0.5 rounded text-[11px] font-bold" id="personaLevelBadge">Standard</span>
+        <span id="personaDeptText" class="text-slate-400">Dept: Biotech | Role: User</span>
+      </div>
+      <button onclick="openPermissionMatrixModal()" class="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-3 py-1 rounded transition-colors shadow-sm">
+        <span class="material-symbols-outlined text-xs">grid_view</span>
+        <span>Access Matrix</span>
+      </button>
+      <a href="/?mode=figma" target="_blank" class="flex items-center gap-1 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold px-2.5 py-1 rounded-md transition-all shadow-sm text-xs" title="Open all 12 screens side-by-side for Figma import">
+        <span class="material-symbols-outlined text-xs">auto_awesome</span>
+        <span>🎨 Figma All-Screens</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- MAIN TOP NAVBAR -->
+  <header class="h-[72px] bg-white border-b border-outline-variant flex items-center justify-between px-4 sm:px-6 z-40 shrink-0">
+    <div class="flex items-center gap-3">
+      <!-- Sidebar Collapse Toggle Button (Hamburger ☰) -->
+      <button type="button" id="sidebarToggleBtn" onclick="toggleSidebarCollapse()" class="p-2 text-gray-600 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors flex items-center justify-center cursor-pointer" title="Toggle Menu">
+        <span class="material-symbols-outlined text-2xl">menu</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="navigateView('home')">
+        <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm shrink-0">
+          <span class="material-symbols-outlined text-2xl">agriculture</span>
+        </div>
+        <div class="hidden sm:block">
+          <h1 class="font-bold text-lg text-primary tracking-tight leading-none">Feedtech Portal</h1>
+          <p class="text-[11px] text-gray-400 font-medium tracking-wide">Enterprise Video Hub</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Search Bar -->
+    <div class="flex-1 max-w-xl mx-4 sm:mx-8 relative hidden md:block">
+      <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
+      <input id="globalSearchInput" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Search by title, category, or description..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-outline-variant rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:bg-white transition-all">
+    </div>
+
+    <!-- Right User Controls -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Portal/Admin Mode Switch Quick Toggle (Only visible for Admins) -->
+      <button id="viewToggleBtn" onclick="togglePortalAdminMode()" class="hidden items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-primary/20 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+        <span class="material-symbols-outlined text-base">admin_panel_settings</span>
+        <span id="viewToggleText">Admin Mode</span>
+      </button>
+
+      <!-- Quick Theme Toggle (Light / Dark Mode) -->
+      <button type="button" id="quickThemeToggleBtn" onclick="toggleDarkMode()" class="p-2 text-gray-500 hover:bg-slate-100 rounded-full transition-colors cursor-pointer" title="Toggle Dark/Light Mode">
+        <span class="material-symbols-outlined text-xl" id="quickThemeIcon">dark_mode</span>
+      </button>
+
+      <!-- Settings / Preferences Icon -->
+      <button onclick="openProfileModal('preferences')" class="p-2 text-gray-500 hover:bg-slate-100 rounded-full transition-colors cursor-pointer" title="Settings">
+        <span class="material-symbols-outlined text-xl">tune</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 pl-2 sm:pl-3 border-l border-outline-variant cursor-pointer group" onclick="openProfileModal('profile')" title="User Profile">
+        <div id="navAvatar" class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-sm group-hover:ring-2 group-hover:ring-primary transition-all">
+          AS
+        </div>
+        <div class="hidden lg:block text-left">
+          <div id="navUserName" class="text-xs font-bold text-gray-900 leading-tight group-hover:text-primary transition-colors">Dr. Alice Smith</div>
+          <div id="navUserRole" class="text-[10px] text-gray-500 font-mono truncate max-w-[140px]">R&D • User</div>
+        </div>
+      </div>
+
+      <!-- Logout Button -->
+      <button onclick="handleLogout()" class="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 border border-rose-200 transition-colors shadow-2xs cursor-pointer" title="Logout">
+        <span class="material-symbols-outlined text-base">logout</span>
+        <span class="hidden sm:inline">Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BODY CONTENT AREA (SIDEBAR + MAIN) -->
+  <div class="flex flex-1 min-h-0 overflow-hidden relative">
+    
+    <!-- SIDEBAR NAVIGATION (COLLAPSIBLE MINI / EXPANDED) -->
+    <aside id="mainSidebar" class="w-[260px] h-full bg-white border-r border-outline-variant flex flex-col justify-between shrink-0 overflow-y-auto scrollbar-hide py-4 px-3 select-none">
+      
+      <div class="space-y-4">
+        <!-- USER PORTAL SECTION -->
+        <div id="sidebarUserSection">
+          <div class="sidebar-section-title px-3 py-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Main Menu</div>
+          <hr class="sidebar-section-divider hidden my-2 border-outline-variant">
+          <nav class="space-y-1 mt-1">
+            <a href="#" onclick="navigateView('home'); return false;" id="nav-home" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold text-primary bg-primary/10 border-l-4 border-primary transition-all" title="Home">
+              <span class="material-symbols-outlined text-xl fill">home</span>
+              <span class="sidebar-link-text">Home</span>
+            </a>
+            <!-- Expandable Categories Dropdown Menu -->
+            <div class="sidebar-dropdown-group" id="sidebarCategoriesGroup">
+              <div class="sidebar-link flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors cursor-pointer group" id="nav-categories" onclick="toggleSidebarCategoriesDropdown(event)" title="Categories">
+                <div class="flex items-center gap-3" onclick="navigateView('categories'); event.stopPropagation();">
+                  <span class="material-symbols-outlined text-xl group-hover:text-primary">category</span>
+                  <span class="sidebar-link-text">Categories</span>
+                </div>
+                <button type="button" onclick="toggleSidebarCategoriesDropdown(event)" class="sidebar-link-text p-0.5 text-gray-400 hover:text-gray-700 rounded transition-transform" id="sidebarCatChevronBtn" title="Toggle Categories">
+                  <span class="material-symbols-outlined text-base transition-transform duration-200" id="sidebarCatChevron">expand_more</span>
+                </button>
+              </div>
+              <!-- Submenu: Dynamic Category List (Scrollable) -->
+              <div id="sidebarCategoriesSubmenu" class="hidden pl-4 pr-1 py-1 space-y-0.5 max-h-60 overflow-y-auto scrollbar-thin">
+                <!-- Populated dynamically via renderSidebarCategories() -->
+              </div>
+            </div>
+
+            <a href="#" onclick="navigateView('history'); return false;" id="nav-history" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="History">
+              <span class="material-symbols-outlined text-xl">history</span>
+              <span class="sidebar-link-text">History</span>
+            </a>
+            <a href="#" onclick="navigateView('favorites'); return false;" id="nav-favorites" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Favorites">
+              <span class="material-symbols-outlined text-xl">favorite</span>
+              <span class="sidebar-link-text">Favorites</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- ADMIN MANAGEMENT SECTION (Visible only for Admins) -->
+        <div id="sidebarAdminSection" class="pt-4 border-t border-outline-variant hidden">
+          <div class="sidebar-section-title px-3 py-1.5 text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">shield</span>
+            <span>Admin Menu</span>
+          </div>
+          <hr class="sidebar-section-divider hidden my-2 border-outline-variant">
+          <nav class="space-y-1 mt-1">
+            <a href="#" onclick="navigateView('admin-dashboard'); return false;" id="nav-admin-dashboard" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Dashboard">
+              <span class="material-symbols-outlined text-xl">dashboard</span>
+              <span class="sidebar-link-text">Dashboard</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-videos'); return false;" id="nav-admin-videos" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Videos">
+              <span class="material-symbols-outlined text-xl">video_library</span>
+              <span class="sidebar-link-text">Videos</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-upload'); return false;" id="nav-admin-upload" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Add Video">
+              <span class="material-symbols-outlined text-xl">add_circle</span>
+              <span class="sidebar-link-text">Add Video</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-categories'); return false;" id="nav-admin-categories" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Categories">
+              <span class="material-symbols-outlined text-xl">domain</span>
+              <span class="sidebar-link-text">Categories</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-depts'); return false;" id="nav-admin-depts" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Departments">
+              <span class="material-symbols-outlined text-xl">corporate_fare</span>
+              <span class="sidebar-link-text">Departments</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-users'); return false;" id="nav-admin-users" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Users">
+              <span class="material-symbols-outlined text-xl">group</span>
+              <span class="sidebar-link-text">Users</span>
+            </a>
+            <a href="#" onclick="navigateView('admin-logs'); return false;" id="nav-admin-logs" class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-slate-50 transition-colors" title="Audit Logs">
+              <span class="material-symbols-outlined text-xl">receipt_long</span>
+              <span class="sidebar-link-text">Audit Logs</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN SCROLLABLE CONTENT VIEW CONTAINER -->
+    <main id="mainViewContainer" class="flex-1 bg-slate-50 overflow-y-auto p-6 md:p-8">
+      
+      <!-- DEDICATED FULL-PAGE VIDEO WATCH PAGE (YOUTUBE-STYLE) -->
+      <div id="view-watch" class="view-content hidden space-y-6 max-w-7xl mx-auto pb-12">
+        <!-- Back Navigation & Breadcrumbs -->
+        <div class="flex items-center justify-between gap-4">
+          <button type="button" onclick="goBackFromWatchPage()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white border border-outline-variant hover:bg-slate-100 text-xs font-bold text-gray-700 transition-colors shadow-2xs">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            <span>Back to Portal</span>
+          </button>
+          <div class="flex items-center gap-2 text-xs text-gray-400">
+            <span id="watchBreadcrumbCategory" class="font-semibold text-primary">Research & Whitepaper</span>
+            <span>/</span>
+            <span id="watchBreadcrumbTitle" class="truncate max-w-[240px] text-gray-600">Video Title</span>
+          </div>
+        </div>
+
+        <!-- 2-Column Responsive Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- LEFT COLUMN (8 Cols): Large Video Player, Metadata, Description & Comments -->
+          <div class="lg:col-span-8 space-y-5">
+            <!-- Video Player (16:9) -->
+            <div class="w-full aspect-video rounded-2xl bg-black overflow-hidden shadow-md relative group border border-slate-800">
+              <video id="watchVideoPlayer" controls class="w-full h-full object-cover" poster="">
+                <source id="watchVideoSource" src="" type="video/mp4">
+                Your browser does not support HTML5 video streaming.
+              </video>
+            </div>
+
+            <!-- Video Title & Author Action Row -->
+            <div class="space-y-3">
+              <h1 id="watchVideoTitle" class="text-xl md:text-2xl font-black text-gray-900 leading-tight">
+                Loading video...
+              </h1>
+
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-b border-outline-variant pb-4">
+                <!-- Video Stats (Views & Upload Date) -->
+                <div>
+                  <div id="watchVideoStats" class="text-xs text-gray-500 font-medium">1,240 views • Uploaded on 2026-09-02</div>
+                </div>
+
+                <!-- Action Buttons: Favorite & Share -->
+                <div class="flex items-center gap-2">
+                  <button type="button" id="watchFavBtn" onclick="toggleWatchFavorite()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-outline-variant bg-white hover:bg-slate-50 text-xs font-bold text-gray-700 transition-colors shadow-2xs">
+                    <span class="material-symbols-outlined text-base text-rose-500" id="watchFavIcon">favorite_border</span>
+                    <span id="watchFavText">Favorite</span>
+                  </button>
+                  <button type="button" onclick="shareWatchVideo()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-outline-variant bg-white hover:bg-slate-50 text-xs font-bold text-gray-700 transition-colors shadow-2xs">
+                    <span class="material-symbols-outlined text-base text-gray-600">share</span>
+                    <span>Share</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description & Category Box -->
+            <div class="bg-white rounded-xl border border-outline-variant p-4 md:p-5 shadow-xs space-y-3">
+              <!-- Category badge -->
+              <div class="flex items-center gap-2">
+                <span id="watchCategoryBadge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                  Category
+                </span>
+              </div>
+
+              <!-- Detailed whitepaper description -->
+              <p id="watchVideoDesc" class="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                Video whitepaper abstract and description details.
+              </p>
+            </div>
+
+            <!-- Discussion & Research Notes Section -->
+            <div class="bg-white rounded-xl border border-outline-variant p-4 md:p-5 shadow-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+                <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-base text-primary">chat</span>
+                  <span>Research Discussion & Notes</span>
+                </h3>
+                <span id="watchCommentCount" class="text-xs text-gray-400 font-semibold">0 notes</span>
+              </div>
+
+              <!-- Add Comment Input -->
+              <div class="flex gap-3 items-start">
+                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
+                  ME
+                </div>
+                <div class="flex-1 space-y-2">
+                  <input id="watchCommentInput" type="text" placeholder="Add a research note or discussion comment..." class="w-full px-3.5 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none text-gray-800 font-medium">
+                  <div class="flex justify-end">
+                    <button type="button" onclick="submitWatchComment()" class="px-4 py-1.5 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 text-xs transition-colors shadow-2xs">
+                      Post Note
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comments Feed -->
+              <div id="watchCommentsList" class="space-y-3 divide-y divide-outline-variant pt-2">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN (4 Cols): Related Videos Playlist (Up Next) -->
+          <div class="lg:col-span-4 space-y-3">
+            <div class="flex items-center justify-between px-1">
+              <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base text-primary">playlist_play</span>
+                <span>Related Videos</span>
+              </h3>
+            </div>
+
+            <div id="watchRelatedList" class="space-y-2.5">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. VIEW: HOME DASHBOARD -->
+      <div id="view-home" class="view-content space-y-8 max-w-7xl mx-auto">
+        <!-- FEATURED HIGHLIGHT CAROUSEL (วิดีโอปักหมุดไฮไลท์หน้าแรก) -->
+        <div id="homeFeaturedCarousel" class="relative w-full h-[380px] md:h-[440px] rounded-2xl overflow-hidden shadow-xl group border border-slate-700/50 bg-slate-950 select-none" onmouseenter="pauseFeaturedCarousel()" onmouseleave="resumeFeaturedCarousel()">
+          <!-- Slides Track (Populated dynamically via renderFeaturedCarousel) -->
+          <div id="featuredSlidesContainer" class="relative w-full h-full">
+            <!-- Dynamic Highlight Slides injected via JS -->
+          </div>
+
+          <!-- Carousel Controls: Prev & Next Buttons -->
+          <button type="button" id="featuredPrevBtn" onclick="prevFeaturedSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur flex items-center justify-center transition-all z-20 shadow-lg cursor-pointer opacity-0 group-hover:opacity-100" title="Previous">
+            <span class="material-symbols-outlined text-2xl">chevron_left</span>
+          </button>
+          <button type="button" id="featuredNextBtn" onclick="nextFeaturedSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur flex items-center justify-center transition-all z-20 shadow-lg cursor-pointer opacity-0 group-hover:opacity-100" title="Next">
+            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+          </button>
+
+          <!-- Indicator Dots -->
+          <div id="featuredDotsContainer" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+            <!-- Dots injected via JS -->
+          </div>
+
+          <!-- Live Auto-Rotate Indicator Badge -->
+          <div class="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1 bg-black/60 text-white text-[11px] rounded-full backdrop-blur font-mono border border-white/10">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="featuredCountBadge">Pinned Highlight</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Category Rows (Populated from state.categories) -->
+        <div id="homeCategoriesContainer" class="space-y-8">
+          <!-- Dynamically populated via renderHomeVideos() -->
+        </div>
+      </div>
+
+      <!-- 2. VIEW: RECOMMENDED -->
+      <div id="view-recommended" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Curated Recommendations</h2>
+            <p class="text-xs text-gray-500 mt-1">Smart AI recommendations tailored to your scientific specialization and individual access permissions.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-gray-400">Sort by:</span>
+            <select class="px-3 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+              <option>Relevance & Impact</option>
+              <option>Recently Added</option>
+              <option>Most Viewed</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button onclick="filterRecommendedCategory('all')" class="px-3 py-1.5 rounded-full bg-primary text-white font-semibold shadow-sm">All Recommended</button>
+          <button onclick="filterRecommendedCategory('biotech')" class="px-3 py-1.5 rounded-full bg-white border border-outline-variant text-gray-700 hover:bg-slate-50">🧪 Biotech Research</button>
+          <button onclick="filterRecommendedCategory('safety')" class="px-3 py-1.5 rounded-full bg-white border border-outline-variant text-gray-700 hover:bg-slate-50">🛡️ Safety & Protocols</button>
+          <button onclick="filterRecommendedCategory('automation')" class="px-3 py-1.5 rounded-full bg-white border border-outline-variant text-gray-700 hover:bg-slate-50">🤖 Mill Automation</button>
+          <button onclick="filterRecommendedCategory('supply')" class="px-3 py-1.5 rounded-full bg-white border border-outline-variant text-gray-700 hover:bg-slate-50">🌾 Commodity Logistics</button>
+        </div>
+
+        <div id="recommendedVideoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- 3. VIEW: WATCH HISTORY & CONTINUE WATCHING (MERGED) -->
+      <div id="view-history" class="view-content hidden space-y-8 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Watch History & Continue Watching</h2>
+            <p class="text-xs text-gray-500 mt-1">Pick up right where you left off or inspect your chronological playback activity log.</p>
+          </div>
+        </div>
+
+        <!-- Section 1: In-Progress / Continue Watching Cards -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-xl">play_circle</span>
+            <h3 class="text-base font-bold text-gray-900">Continue Watching</h3>
+          </div>
+          <div id="continueWatchingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <!-- Section 2: Complete Chronological Watch History Log -->
+        <section class="space-y-4 pt-4 border-t border-outline-variant">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-xl">history</span>
+              <h3 class="text-base font-bold text-gray-900">Past Viewing History</h3>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+            <div id="watchHistoryContainer" class="divide-y divide-outline-variant">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 4. VIEW: FAVORITES -->
+      <div id="view-favorites" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Saved & Favorite Videos</h2>
+            <p class="text-xs text-gray-500 mt-1">Your bookmarked research whitepapers and reference protocols for quick offline access.</p>
+          </div>
+          <span id="favCountBadge" class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100">0 Items</span>
+        </div>
+        <div id="favoritesVideoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- 6. VIEW: CATEGORY HUB (DYNAMIC) -->
+      <div id="view-department" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="relative bg-gradient-to-r from-emerald-900 to-teal-800 rounded-2xl p-6 md:p-8 text-white shadow-lg overflow-hidden">
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-3xl font-black text-emerald-300 shadow-inner" id="deptHubIcon">
+                BIO
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 uppercase tracking-wide">Category Hub</span>
+                  <span class="text-xs text-emerald-200" id="deptHubCode">Knowledge Category</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-black text-white mt-1" id="deptHubTitle">Biotechnology Category</h2>
+                <p class="text-xs text-emerald-100 max-w-2xl mt-1 opacity-90" id="deptHubDesc">
+                  Leading cellular nutrition, microbiome analysis, and patent-pending feed additive formulation research.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col items-start md:items-end text-xs text-emerald-100 bg-white/10 backdrop-blur p-4 rounded-xl border border-white/10">
+              <span class="font-bold text-white text-sm" id="deptHubVideoCount">5 Videos Cataloged</span>
+              <span class="text-[11px] text-emerald-200 mt-0.5">Access Control: Strict PBAC Enforcement Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900">Category Video Catalog</h3>
+          <div id="deptHubVideoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. VIEW: EVENTS & CONFERENCES -->
+      <div id="view-events" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Corporate Events & Symposia</h2>
+            <p class="text-xs text-gray-500 mt-1">Broadcast recordings and upcoming technical seminars across Feedtech research facilities.</p>
+          </div>
+        </div>
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- 7.1 VIEW: EVENT DETAIL (STITCH DESIGN) -->
+      <div id="view-event-detail" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs text-gray-500">
+          <button onclick="navigateView('events')" class="hover:text-primary hover:underline flex items-center gap-1 font-semibold">
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+            <span>Back to Events</span>
+          </button>
+          <span>/</span>
+          <span id="eventDetailBreadcrumb" class="text-gray-900 font-bold truncate">Event Title</span>
+        </nav>
+
+        <!-- Hero Event Banner -->
+        <div class="relative w-full h-[320px] rounded-2xl overflow-hidden shadow-md group">
+          <div id="eventDetailBannerBg" class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUOT-RGlBy4dc_4zqFbk74uA0TgJW_sMGnZrmBsNzo-Vg1QFsgQXhnbK7bcpK089bm9hkI-cC_1FQkOS0kF7lXE-DCZZxXJLiN0LbHeEmh6RckPH1MNHJIT6F7QgZ_es-R5FzJxg3Rmks4Yl4BlnVU8RhVDhz7zcVCzdJqtEcqW9i5z6IBePFYVRYFxRI4OR3dt17WLmHv5cwwTobpF_YhHjir-cixxe86wC1lETeDemWy_UOsHUbXWLvmdpdDBJZ4xxI3FOg9e6YE');"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full flex flex-col md:flex-row justify-between items-end gap-4 text-white">
+            <div>
+              <div class="flex items-center gap-2.5 mb-2.5">
+                <span id="eventDetailStatusBadge" class="bg-primary text-white text-[11px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">Upcoming</span>
+                <span id="eventDetailClearanceBadge" class="bg-white/20 backdrop-blur-xs text-white text-[11px] px-2.5 py-0.5 rounded-full font-bold">Standard</span>
+                <span id="eventDetailDateText" class="flex items-center gap-1 text-xs opacity-90"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 12-14, 2026</span>
+                <span id="eventDetailLocationText" class="flex items-center gap-1 text-xs opacity-90"><span class="material-symbols-outlined text-sm">location_on</span> Chicago, IL</span>
+              </div>
+              <h1 id="eventDetailTitle" class="text-2xl md:text-3xl font-black mb-2 text-white">Feedtech Annual Conference 2023</h1>
+              <p id="eventDetailDesc" class="text-xs md:text-sm text-white/90 max-w-2xl line-clamp-2">Pioneering the future of agricultural technology. Access all keynote sessions, technical breakouts, and executive panels from our biggest event of the year.</p>
+            </div>
+            <div class="shrink-0 flex gap-2.5">
+              <a id="eventDetailMaterialsBtn" href="#" target="_blank" class="bg-white/20 border border-white/30 hover:bg-white/30 text-white text-xs font-bold py-2.5 px-4 rounded-lg backdrop-blur-sm transition-all flex items-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-base">download</span>
+                <span>Event Materials</span>
+              </a>
+              <button id="eventDetailPlayBtn" onclick="playEventHighlightReel()" class="bg-primary hover:bg-emerald-800 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">play_arrow</span>
+                <span>Play Highlight Reel</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Content Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Column (8 cols): Agenda, Keynote Sessions & Video Broadcasts -->
+          <div class="lg:col-span-8 space-y-6">
+            <!-- Event Broadcast Player / Live Replay Box -->
+            <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-xl">tv</span>
+                  <h3 class="font-bold text-gray-900 text-base">Conference Livestream & On-Demand Replay</h3>
+                </div>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">1080p FHD Stream</span>
+              </div>
+              <div class="aspect-video w-full rounded-xl bg-black overflow-hidden relative group">
+                <video id="eventDetailVideoPlayer" controls class="w-full h-full object-contain" poster="https://lh3.googleusercontent.com/aida-public/AB6AXuCUOT-RGlBy4dc_4zqFbk74uA0TgJW_sMGnZrmBsNzo-Vg1QFsgQXhnbK7bcpK089bm9hkI-cC_1FQkOS0kF7lXE-DCZZxXJLiN0LbHeEmh6RckPH1MNHJIT6F7QgZ_es-R5FzJxg3Rmks4Yl4BlnVU8RhVDhz7zcVCzdJqtEcqW9i5z6IBePFYVRYFxRI4OR3dt17WLmHv5cwwTobpF_YhHjir-cixxe86wC1lETeDemWy_UOsHUbXWLvmdpdDBJZ4xxI3FOg9e6YE">
+                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+
+            <!-- Agenda Schedule -->
+            <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-gray-900 text-base">Session Agenda & Breakouts</h3>
+                <span class="text-xs text-gray-400">4 Keynote Tracks</span>
+              </div>
+              <div class="space-y-3 divide-y divide-outline-variant/50" id="eventDetailAgendaList">
+                <div class="pt-3 first:pt-0 flex items-start gap-4">
+                  <span class="text-xs font-bold text-primary font-mono shrink-0 w-24">09:00 - 10:15</span>
+                  <div class="flex-1">
+                    <div class="font-bold text-gray-900 text-xs">Opening Keynote: Next-Gen Sustainable Agri-Feed Systems</div>
+                    <div class="text-[11px] text-gray-500 mt-0.5">Presenter: Executive Leadership Team & Chief Scientists</div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-slate-100 text-gray-600 rounded text-[10px] font-bold shrink-0">Main Auditorium</span>
+                </div>
+                <div class="pt-3 flex items-start gap-4">
+                  <span class="text-xs font-bold text-primary font-mono shrink-0 w-24">10:30 - 12:00</span>
+                  <div class="flex-1">
+                    <div class="font-bold text-gray-900 text-xs">Breakout 1: Precision Fermentation & Microbial Bio-Peptides</div>
+                    <div class="text-[11px] text-gray-500 mt-0.5">Focusing on alternative protein synthesize and strain gene validation</div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold shrink-0">Track A (Biotech)</span>
+                </div>
+                <div class="pt-3 flex items-start gap-4">
+                  <span class="text-xs font-bold text-primary font-mono shrink-0 w-24">13:30 - 15:00</span>
+                  <div class="flex-1">
+                    <div class="font-bold text-gray-900 text-xs">Breakout 2: High-Velocity Swine Disease Prevention Protocols</div>
+                    <div class="text-[11px] text-gray-500 mt-0.5">Field epidemiology case studies from ASEAN breeding facilities</div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[10px] font-bold shrink-0">Track B (Swine)</span>
+                </div>
+                <div class="pt-3 flex items-start gap-4">
+                  <span class="text-xs font-bold text-primary font-mono shrink-0 w-24">15:15 - 16:30</span>
+                  <div class="flex-1">
+                    <div class="font-bold text-gray-900 text-xs">Roundtable & Executive Panel: R&D Commercialization Roadmap 2026-2030</div>
+                    <div class="text-[11px] text-gray-500 mt-0.5">Open Q&A with Senior Directors and Global Research Partners</div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold shrink-0">Executive Hall</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (4 cols): Speaker Info, Venue, Registration & Attendees -->
+          <div class="lg:col-span-4 space-y-6">
+            <!-- Keynote Speaker Card -->
+            <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm space-y-4">
+              <h3 class="font-bold text-gray-900 text-sm">Keynote Speaker</h3>
+              <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-full bg-slate-200 overflow-hidden shrink-0 border border-outline-variant">
+                  <img id="eventDetailSpeakerImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <h4 id="eventDetailSpeakerName" class="font-bold text-gray-900 text-sm">Dr. Jonathan Vane</h4>
+                  <p id="eventDetailSpeakerRole" class="text-xs text-primary font-semibold">VP of Agricultural Biotechnology</p>
+                  <p class="text-[10px] text-gray-400 mt-0.5">Feedtech Global R&D Center</p>
+                </div>
+              </div>
+              <p class="text-xs text-gray-600 leading-relaxed border-t border-outline-variant/40 pt-3">
+                Leading researcher specializing in biotechnology, genomic sequencing, and industrial feed enzymes with over 20 global patents.
+              </p>
+            </div>
+
+            <!-- Event Logistics & Metadata -->
+            <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm space-y-3.5 text-xs">
+              <h3 class="font-bold text-gray-900 text-sm mb-1">Event Information</h3>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">schedule</span> Time:</span>
+                <span id="eventDetailTimeText" class="font-bold text-gray-800">09:00 - 17:00 EST</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">corporate_fare</span> Organizing Department:</span>
+                <span id="eventDetailDeptText" class="font-bold text-gray-800">Research &amp; Development (R&amp;D)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">category</span> Category:</span>
+                <span id="eventDetailCategoryText" class="font-bold text-gray-800">Corporate Knowledge</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">description</span> Content Type:</span>
+                <span id="eventDetailTypeText" class="font-bold text-gray-800">Corporate Event</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">group</span> Registered:</span>
+                <span id="eventDetailAttendeesText" class="font-bold text-gray-800">1,240 Attendees</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-gray-400">shield</span> Access Scope:</span>
+                <span id="eventDetailLevelBadge" class="px-2 py-0.5 bg-emerald-50 text-emerald-800 font-bold rounded text-[11px]">Standard</span>
+              </div>
+
+              <div class="pt-3 border-t border-outline-variant space-y-2">
+                <button onclick="registerForEventPrompt()" class="w-full py-2.5 bg-primary hover:bg-emerald-800 text-white font-bold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                  <span class="material-symbols-outlined text-sm">how_to_reg</span>
+                  <span>Register for Live Stream</span>
+                </button>
+                <button onclick="addEventToCalendar()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm">calendar_add_on</span>
+                  <span>Add to Outlook Calendar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. VIEW: CATEGORIES HUB (INTEGRATED CONTENT DIRECTORY) -->
+      <div id="view-categories" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Categories Hub</h2>
+            <p class="text-xs text-gray-500 mt-1">Central directory of knowledge categories for videos stored in the NAS library.</p>
+          </div>
+          <!-- Filter Tabs inside Categories Directory -->
+          <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-outline-variant text-xs">
+            <button onclick="filterCategoriesTab('all')" id="catTab-all" class="cat-tab-btn px-3 py-1.5 rounded-lg font-bold bg-white text-primary shadow-xs">All Categories</button>
+          </div>
+        </div>
+
+        <!-- Section 1: Standard Categories Grid -->
+        <div id="categoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Section 2: Integrated Meeting Recordings Grid (Embedded) -->
+        <div id="integratedMeetingsContainer" class="space-y-4 hidden">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base text-primary">meeting_room</span>
+              <span>Townhall & Internal Meeting Recordings</span>
+            </h3>
+            <span class="text-xs text-gray-400">Executive Briefings & Technical Reviews</span>
+          </div>
+          <div id="integratedMeetingsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- 11. VIEW: ADMIN DASHBOARD OVERVIEW (STITCH BENTO DESIGN) -->
+      <div id="view-admin-dashboard" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900 mb-1">Admin Dashboard</h2>
+            <p class="text-xs text-gray-500">System overview, access governance, and key metrics for Feedtech Video Portal.</p>
+          </div>
+        </div>
+
+        <!-- Deep Analytics KPI Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Watch Hours</span>
+              <span class="material-symbols-outlined text-primary bg-emerald-50 p-2 rounded-lg text-xl">timer</span>
+            </div>
+            <span class="text-3xl font-black text-gray-900 mt-1" id="adminKpiWatchHours">2,613 hrs</span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span class="material-symbols-outlined text-[16px]">trending_up</span>
+              <span>+18.4% engagement surge</span>
+            </span>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Video Views</span>
+              <span class="material-symbols-outlined text-blue-600 bg-blue-50 p-2 rounded-lg text-xl">visibility</span>
+            </div>
+            <span class="text-3xl font-black text-gray-900 mt-1" id="adminKpiViews">13,634</span>
+            <span class="text-xs text-blue-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+              <span>Across all categories</span>
+            </span>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Avg Completion Rate</span>
+              <span class="material-symbols-outlined text-amber-600 bg-amber-50 p-2 rounded-lg text-xl">monitoring</span>
+            </div>
+            <span class="text-3xl font-black text-gray-900 mt-1" id="adminKpiCompletion">78.4%</span>
+            <span class="text-xs text-amber-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span class="material-symbols-outlined text-[16px]">check_circle</span>
+              <span>High retention index</span>
+            </span>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Videos</span>
+              <span class="material-symbols-outlined text-purple-600 bg-purple-50 p-2 rounded-lg text-xl">video_library</span>
+            </div>
+            <span class="text-3xl font-black text-gray-900 mt-1" id="adminKpiVideos">23</span>
+            <span class="text-xs text-purple-600 font-semibold flex items-center gap-1 mt-0.5" id="adminKpiUsers">
+              <span>11 Active Researchers</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Deep Analytics: Category Distribution & Top Videos Leaderboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Category Engagement Breakdown (5 cols) -->
+          <div class="lg:col-span-5 bg-white border border-outline-variant rounded-xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+              <div>
+                <h3 class="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base text-primary">pie_chart</span>
+                  <span>Category Engagement Breakdown</span>
+                </h3>
+                <p class="text-[11px] text-gray-400">Total viewership distributed by academic category</p>
+              </div>
+              <span class="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded">Real-time</span>
+            </div>
+            <div id="adminCategoryAnalyticsList" class="space-y-3.5 pt-1"></div>
+          </div>
+
+          <!-- Top Performing Videos Leaderboard (7 cols) -->
+          <div class="lg:col-span-7 bg-white border border-outline-variant rounded-xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+              <div>
+                <h3 class="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base text-primary">leaderboard</span>
+                  <span>Top Performing Videos (Most Watched)</span>
+                </h3>
+                <p class="text-[11px] text-gray-400">Content ranked by total employee views and engagement</p>
+              </div>
+              <button onclick="navigateView('admin-videos')" class="text-xs font-bold text-primary hover:underline">View All Videos</button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-outline-variant">
+                    <th class="py-2 px-3">#</th>
+                    <th class="py-2 px-3">Video Title</th>
+                    <th class="py-2 px-3">Category</th>
+                    <th class="py-2 px-3">Views</th>
+                    <th class="py-2 px-3">Duration</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTopVideosList" class="divide-y divide-outline-variant text-xs">
+                  <!-- Populated dynamically via loadAdminDashboard() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Grid Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="font-bold text-gray-900 text-sm">Monthly Video Consumption</h3>
+                <p class="text-xs text-gray-400">Video usage trend across the portal</p>
+              </div>
+            </div>
+            <div class="flex-1 relative flex items-end justify-between gap-3 pt-6 border-b border-outline-variant/40 pb-4 h-56">
+              <div onclick="openCategoryDrilldown('Biotech')" title="Click to drill down Biotech videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[75%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[85%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">Biotech</span>
+              </div>
+              <div onclick="openCategoryDrilldown('Swine')" title="Click to drill down Swine videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[90%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[90%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">Swine</span>
+              </div>
+              <div onclick="openCategoryDrilldown('QC-Lab')" title="Click to drill down QC-Lab videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[60%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[70%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">QC-Lab</span>
+              </div>
+              <div onclick="openCategoryDrilldown('Poultry')" title="Click to drill down Poultry videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[45%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[60%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">Poultry</span>
+              </div>
+              <div onclick="openCategoryDrilldown('Production')" title="Click to drill down Operations videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[55%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[80%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">Operations</span>
+              </div>
+              <div onclick="openCategoryDrilldown('Aquatic')" title="Click to drill down Aquatic videos" class="flex flex-col items-center gap-2 group flex-1 h-full justify-end cursor-pointer">
+                <div class="w-full max-w-[42px] bg-primary/20 rounded-t-md h-[40%] group-hover:bg-primary/40 transition-all relative flex items-end overflow-hidden group-hover:scale-105">
+                  <div class="w-full bg-primary h-[50%] rounded-t-md"></div>
+                </div>
+                <span class="text-[11px] font-bold text-gray-600 group-hover:text-primary">Aquatic</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-xs text-gray-400 mt-4 pt-2">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-primary"></span> Primary Consumption</span>
+              <span class="text-[11px] text-primary font-medium cursor-pointer hover:underline" onclick="openCategoryDrilldown('All')">Click any category to view individual video statistics</span>
+            </div>
+          </div>
+
+          <!-- Recent Audit Activity Stream (Col Span 1) -->
+          <div class="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-900 text-sm">Recent Activity Stream</h3>
+                <button onclick="navigateView('admin-logs')" class="text-primary hover:underline text-xs font-semibold">View All Logs</button>
+              </div>
+              <div class="space-y-3.5 text-xs">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-full bg-emerald-50 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-base">cloud_upload</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-gray-800">New Video Registered</div>
+                    <div class="text-[11px] text-gray-500">Dr. Alice uploaded Swine Immunity Assay Q4</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5 font-mono">10 mins ago</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-base">lock</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-gray-800">Access Policies Re-evaluated</div>
+                    <div class="text-[11px] text-gray-500">Access Matrix checked for 8 users</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5 font-mono">1 hour ago</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-base">person_add</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-gray-800">User Account Provisioned (PBAC)</div>
+                    <div class="text-[11px] text-gray-500">Configured video access authorization policy</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5 font-mono">3 hours ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl border border-outline-variant p-5 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-gray-900">Access Control Distribution</h3>
+            <div class="p-4 rounded-xl bg-slate-50 border border-outline-variant space-y-3 text-xs">
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 font-semibold text-gray-700"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Public (Company-Wide)</span><span id="distPublicCount" class="font-bold text-gray-900">173 Videos</span></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 font-semibold text-gray-700"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Include (Whitelisted)</span><span id="distIncludeCount" class="font-bold text-gray-900">7 Videos</span></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 font-semibold text-gray-700"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Exclude (Blacklisted)</span><span id="distExcludeCount" class="font-bold text-gray-900">3 Videos</span></div>
+            </div>
+            <button onclick="navigateView('admin-matrix')" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 font-bold text-xs rounded-lg transition-colors">Inspect Access Matrix</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. VIEW: USER MANAGEMENT (ADMIN) -->
+      <div id="view-admin-users" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">User Management</h2>
+            <p class="text-xs text-gray-500 mt-1">Manage employee accounts, roles (User / Admin), and configure video access permissions.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button onclick="exportUsersCSV()" class="px-3.5 py-2 border border-outline-variant bg-white text-gray-700 text-xs font-semibold rounded-lg hover:bg-slate-50 flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Export CSV</span>
+            </button>
+            <button onclick="openImportExcelModal()" class="px-3.5 py-2 border border-outline-variant bg-white text-gray-700 text-xs font-semibold rounded-lg hover:bg-slate-50 flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">upload_file</span>
+              <span>Import Excel</span>
+            </button>
+            <button onclick="openDepartmentModal()" class="px-3.5 py-2 border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+              <span class="material-symbols-outlined text-sm text-primary">corporate_fare</span>
+              <span>Manage Departments</span>
+            </button>
+            <button onclick="openAddUserModal()" class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-sm">person_add</span>
+              <span>Add New User</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Users Table Card -->
+        <div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+            <div class="relative w-72">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input id="userTableSearchInput" oninput="filterUserTable()" type="text" placeholder="Search user by name, email, ID..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary outline-none">
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="userDeptFilter" onchange="filterUserTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+                <option value="">All Departments</option>
+              </select>
+              <select id="userLevelFilter" onchange="filterUserTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+                <option value="">All Roles</option>
+                <option value="Admin">🛡️ Admin</option>
+                <option value="User">👤 User</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-outline-variant">
+                  <th class="py-3 px-5">User ID</th>
+                  <th class="py-3 px-5">Name & Email</th>
+                  <th class="py-3 px-5">Department</th>
+                  <th class="py-3 px-5">Role</th>
+                  <th class="py-3 px-5">Status</th>
+                  <th class="py-3 px-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody" class="divide-y divide-outline-variant text-xs text-gray-700">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. VIEW: VIDEO MANAGEMENT (ADMIN) -->
+      <div id="view-admin-videos" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Video Asset Management</h2>
+            <p class="text-xs text-gray-500 mt-1">Manage corporate video catalog, categories, and Person-Based Access Control classifications.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="downloadVideoTemplateCsv()" class="px-3.5 py-2 border border-outline-variant bg-white text-gray-700 hover:bg-slate-50 text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-2xs transition-colors" title="Download sample CSV template for bulk video catalog ingestion">
+              <span class="material-symbols-outlined text-sm text-primary">download</span>
+              <span>Download Template (.csv)</span>
+            </button>
+            <button onclick="openImportVideosModal()" class="px-3.5 py-2 border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-2xs transition-colors" title="Import up to 800+ videos at once">
+              <span class="material-symbols-outlined text-sm">upload_file</span>
+              <span>Import CSV</span>
+            </button>
+            <button onclick="navigateView('admin-upload')" class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 flex items-center gap-1.5 shadow-sm transition-colors">
+              <span class="material-symbols-outlined text-sm">add_circle</span>
+              <span>+ Add Video</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+            <div class="relative w-72">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input id="videoTableSearchInput" oninput="filterVideoTable()" type="text" placeholder="Search video by title or VID..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary outline-none">
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="videoCatFilter" onchange="filterVideoTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none font-medium text-gray-700">
+                <option value="">All Categories</option>
+              </select>
+              <select id="videoLevelFilter" onchange="filterVideoTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+                <option value="">All Access Modes</option>
+                <option value="public">🌐 Public</option>
+                <option value="include">👥 Include</option>
+                <option value="exclude">🚫 Exclude</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-outline-variant">
+                  <th class="py-3 px-4">Video Asset</th>
+                  <th class="py-3 px-4">Category</th>
+                  <th class="py-3 px-4">Access Mode</th>
+                  <th class="py-3 px-4 text-center">Hero Highlight</th>
+                  <th class="py-3 px-4">Stats</th>
+                  <th class="py-3 px-4">Uploaded By</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="videoTableBody" class="divide-y divide-outline-variant text-xs text-gray-700">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. VIEW: CLOUD UPLOAD HUB (ADMIN) -->
+      <div id="view-admin-upload" class="view-content hidden space-y-6 max-w-4xl mx-auto">
+        <div>
+          <h2 class="text-2xl font-black text-gray-900">Upload Video Asset (Link Architecture)</h2>
+          <p class="text-xs text-gray-500 mt-1">Enterprise Cloud-Link Architecture: Register OneDrive, SharePoint, or internal CDN video links with RBAC classification.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-outline-variant p-6 shadow-sm space-y-5">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Video Source Link (OneDrive / SharePoint / Stream) <span class="text-rose-500">*</span></label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">link</span>
+              <input id="uploadVideoUrl" type="url" placeholder="https://feedtech-my.sharepoint.com/:v:/r/personal/.../ResearchVideo.mp4" class="w-full pl-9 pr-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none">
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1">Direct video links, SharePoint streams, or MP4 cloud files are supported for demo playback.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Video Title <span class="text-rose-500">*</span></label>
+              <input id="uploadVideoTitle" type="text" placeholder="e.g. Swine Immunity Assay Q4 Review" class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none font-semibold text-gray-900">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Category <span class="text-rose-500">*</span></label>
+              <select id="uploadVideoDept" class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none font-medium text-gray-800">
+                <!-- Populated dynamically with categories -->
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Description</label>
+            <textarea id="uploadVideoDesc" rows="3" placeholder="Summary of the video content, methodology, and key takeaways..." class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none resize-none"></textarea>
+          </div>
+
+
+          <!-- Video Thumbnail Management -->
+          <div class="bg-slate-50 border border-outline-variant p-4 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base text-primary">image</span>
+                <span>Video Thumbnail</span>
+              </label>
+              <span class="text-[11px] text-gray-400 font-mono">16:9 Aspect Ratio</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-start">
+              <!-- Thumbnail Live Preview -->
+              <div class="sm:col-span-5 aspect-video w-full rounded-xl bg-slate-200 border border-outline-variant overflow-hidden relative shadow-xs group">
+                <img id="uploadThumbnailPreview" src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80" onerror="this.onerror=null; this.src=generateFallbackThumbnail('Cover Preview', 'Biotech')" alt="Video Thumbnail Preview" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span class="text-white text-xs font-bold bg-black/60 px-2.5 py-1 rounded-md flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">visibility</span> Live Preview
+                  </span>
+                </div>
+                <div class="absolute bottom-2 right-2 bg-black/75 text-white text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
+                  16:9 Preview
+                </div>
+              </div>
+
+              <!-- Thumbnail Controls (2 Direct Options: Local File + Video Frame Capture) -->
+              <div class="sm:col-span-7 space-y-3 text-xs">
+                
+                <!-- Action Buttons Row -->
+                <div class="space-y-2">
+                  <span class="text-[11px] font-bold text-gray-700 block">Thumbnail Source:</span>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <!-- Option 1: Upload from Device -->
+                    <div>
+                      <input type="file" id="uploadThumbFileInput" accept="image/*" class="hidden" onchange="handleThumbnailFileSelect(this, 'uploadThumbnailUrl', 'uploadThumbnailPreview')">
+                      <button type="button" onclick="document.getElementById('uploadThumbFileInput').click()" class="w-full py-2 px-3 bg-white border border-slate-300 hover:border-primary hover:bg-emerald-50 text-gray-800 rounded-lg font-bold flex items-center justify-center gap-1.5 transition-all shadow-2xs">
+                        <span class="material-symbols-outlined text-base text-primary">upload_file</span>
+                        <span>Upload File</span>
+                      </button>
+                    </div>
+
+                    <!-- Option 2: Capture Frame at Second -->
+                    <div class="flex items-center gap-1.5">
+                      <div class="relative flex-1">
+                        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 font-mono">Sec:</span>
+                        <input id="uploadThumbSecInput" type="number" min="0" step="1" value="5" placeholder="5" class="w-full pl-10 pr-2 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none focus:ring-1 focus:ring-primary font-mono text-gray-800 font-bold">
+                      </div>
+                      <button type="button" onclick="captureThumbnailFromVideoTime('uploadThumbSecInput', 'uploadVideoUrl', 'uploadThumbnailUrl', 'uploadThumbnailPreview')" class="py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 transition-colors shrink-0 shadow-2xs" title="Capture frame at second">
+                        <span class="material-symbols-outlined text-sm">screenshot</span>
+                        <span>Capture</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Custom URL input -->
+                <div>
+                  <label class="block font-semibold text-gray-600 mb-1 text-[11px]">Or Image URL:</label>
+                  <input id="uploadThumbnailUrl" type="url" oninput="updateUploadThumbnailPreview(this.value)" placeholder="https://... (or auto-generated from file/video)" class="w-full px-3 py-1.5 border border-outline-variant rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary text-xs font-mono text-gray-700">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-slate-50 border border-outline-variant p-4 rounded-xl space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-800 mb-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base text-primary">shield_person</span>
+                <span>Access Control Policy <span class="text-rose-500">*</span></span>
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <label class="flex items-center gap-2 p-2.5 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                  <input type="radio" name="uploadAccessMode" value="public" checked onchange="toggleUploadAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                  <div>
+                    <div class="text-xs font-bold text-gray-800">🌐 Public Access</div>
+                    <div class="text-[10px] text-gray-400">Accessible by all employees</div>
+                  </div>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                  <input type="radio" name="uploadAccessMode" value="include" onchange="toggleUploadAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                  <div>
+                    <div class="text-xs font-bold text-gray-800">👥 Whitelist (Include)</div>
+                    <div class="text-[10px] text-gray-400">Selected authorized members only</div>
+                  </div>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                  <input type="radio" name="uploadAccessMode" value="exclude" onchange="toggleUploadAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                  <div>
+                    <div class="text-xs font-bold text-gray-800">🚫 Blacklist (Exclude)</div>
+                    <div class="text-[10px] text-gray-400">Accessible by all except excluded</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Person Selector Box (Visible when Include or Exclude is selected) -->
+            <div id="uploadPersonSelectorBox" class="hidden space-y-2.5 pt-2 border-t border-outline-variant/60">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-[11px] font-bold text-gray-700" id="uploadPersonBoxTitle">Select Authorized Personnel:</span>
+                <div class="flex items-center gap-1.5 text-[10px]">
+                  <button type="button" onclick="selectVipPresetForUpload()" class="px-2 py-1 bg-amber-50 text-amber-800 hover:bg-amber-100 font-bold rounded-md border border-amber-300 flex items-center gap-1">⭐ Add Executive Board</button>
+                  <button type="button" onclick="clearUploadPersons()" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-gray-600 font-bold rounded-md">Clear All</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                <div class="sm:col-span-7">
+                  <input type="text" id="uploadPersonSearchInput" oninput="filterUploadPersonList(this.value)" placeholder="Search employee by name, ID..." class="w-full px-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none">
+                </div>
+                <div class="sm:col-span-5 flex items-center gap-1.5">
+                  <select id="uploadDeptFilter" onchange="filterUploadPersonList()" class="flex-1 px-2.5 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none">
+                    <option value="">All Departments</option>
+                  </select>
+                  <button type="button" onclick="addDepartmentPersonsForUpload()" class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-lg text-[10px] shrink-0 border border-emerald-300" title="Add all members of selected department">
+                    + Add Dept
+                  </button>
+                </div>
+              </div>
+
+              <!-- Select All Toolbar for Upload -->
+              <div class="flex items-center justify-between px-2.5 py-1.5 bg-slate-100/90 rounded-lg border border-slate-200 text-xs">
+                <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none">
+                  <input type="checkbox" id="uploadSelectAllCheckbox" onchange="toggleUploadSelectAll(this.checked)" class="rounded text-primary focus:ring-primary w-4 h-4 cursor-pointer">
+                  <span>Select All Visible Members (เลือกทั้งหมด)</span>
+                </label>
+                <span class="text-[11px] text-gray-500 font-medium" id="uploadVisibleCountText"></span>
+              </div>
+
+              <div id="uploadPersonListContainer" class="max-h-48 overflow-y-auto space-y-1.5 p-2 bg-white rounded-lg border border-outline-variant divide-y divide-slate-100">
+                <!-- Populated dynamically via JS -->
+              </div>
+              <div class="text-[11px] text-gray-500 font-medium" id="uploadSelectedPersonsCountText">Selected: 0 persons</div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-outline-variant flex justify-end gap-3">
+            <button onclick="navigateView('admin-videos')" class="px-4 py-2 border border-outline-variant text-gray-600 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
+            <button onclick="submitUploadVideo()" class="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 transition-colors shadow-sm flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">cloud_done</span>
+              <span>Register & Index Video</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. VIEW: ACCESS CONTROL MATRIX (ADMIN) -->
+      <div id="view-admin-matrix" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Access Control Matrix (Live Evaluator)</h2>
+            <p class="text-xs text-gray-500 mt-1">Real-time visualization of who can watch which video according to Person-Based Access Control policies.</p>
+          </div>
+          <button onclick="loadAccessMatrix()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-gray-700 text-xs font-semibold rounded-lg flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">refresh</span>
+            <span>Re-evaluate Matrix</span>
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl border border-outline-variant shadow-sm p-5 space-y-4">
+          <div class="flex flex-wrap gap-4 text-xs font-medium text-gray-600 pb-3 border-b border-outline-variant">
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> <span>Granted (Public / Permitted Include Group)</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-400"></span> <span>Hidden / Denied (Excluded or Not in Whitelist)</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-500"></span> <span>Admin Override (Full access)</span></div>
+          </div>
+          <div id="matrixContainer" class="overflow-x-auto">
+            <!-- Dynamic Matrix Table -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 16. VIEW: PURE AUDIT & COMPLIANCE LOGS (ADMIN) -->
+      <div id="view-admin-logs" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <!-- Page Header & Actions -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-2xl text-primary">receipt_long</span>
+              <span>Audit Logs</span>
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">Review system activities, access events, and administrative changes.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button onclick="exportAuditLogsCsv()" class="px-3.5 py-2 border border-outline-variant bg-white text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-50 flex items-center gap-1.5 shadow-2xs transition-colors">
+              <span class="material-symbols-outlined text-sm text-primary">download</span>
+              <span>Export CSV</span>
+            </button>
+            <button onclick="window.print()" class="px-3.5 py-2 border border-outline-variant bg-white text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-50 flex items-center gap-1.5 shadow-2xs transition-colors">
+              <span class="material-symbols-outlined text-sm text-gray-500">picture_as_pdf</span>
+              <span>Print / PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Strip -->
+        <div class="bg-white border border-outline-variant rounded-xl p-4 shadow-sm flex flex-col md:flex-row gap-4 items-end">
+          <div class="flex-1 w-full">
+            <label class="block text-[11px] font-bold text-gray-500 mb-1 uppercase tracking-wider">Date</label>
+            <input id="auditDateFilter" onchange="filterAuditLogs()" type="date" class="w-full bg-slate-50 border border-outline-variant rounded-lg px-3 py-1.5 text-xs text-gray-800 font-mono focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+          </div>
+          <div class="flex-1 w-full">
+            <label class="block text-[11px] font-bold text-gray-500 mb-1 uppercase tracking-wider">Actor / User</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input id="auditActorFilter" oninput="filterAuditLogs()" type="text" placeholder="Search by name, action, or details..." class="w-full bg-slate-50 border border-outline-variant rounded-lg pl-8 pr-3 py-1.5 text-xs text-gray-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+            </div>
+          </div>
+          <div class="flex-1 w-full">
+            <label class="block text-[11px] font-bold text-gray-500 mb-1 uppercase tracking-wider">Event Type</label>
+            <select id="auditActionFilter" onchange="filterAuditLogs()" class="w-full bg-slate-50 border border-outline-variant rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+              <option value="ALL">All Events</option>
+              <option value="AUTH_LOGIN">🔑 Login</option>
+              <option value="AUTH_LOGOUT">🚪 Logout</option>
+              <option value="PERSONA_SWITCH">🔄 Persona Switch</option>
+              <option value="VIDEO_UPLOAD">🎬 Video Upload</option>
+              <option value="VIDEO_BATCH_IMPORT">📦 Bulk Import</option>
+              <option value="VIDEO_UPDATE">✏️ Video Update</option>
+              <option value="VIDEO_PIN_TOGGLE">📌 Video Pin Toggle</option>
+              <option value="VIDEO_RECOMMEND_TOGGLE">⭐ Video Recommend Toggle</option>
+              <option value="VIDEO_DELETE">🗑️ Video Delete</option>
+              <option value="CATEGORY_CREATE">📂 Category Create</option>
+              <option value="CATEGORY_UPDATE">📝 Category Update</option>
+              <option value="CATEGORY_DELETE">❌ Category Delete</option>
+              <option value="CONTENT_TYPE_CREATE">📑 Content Type Create</option>
+              <option value="CONTENT_TYPE_DELETE">❌ Content Type Delete</option>
+              <option value="USER_CREATE">✨ User Create</option>
+              <option value="USER_UPDATE">👤 User Change</option>
+              <option value="USER_DELETE">🚫 User Delete</option>
+              <option value="USER_STATUS_TOGGLE">🔄 Status Toggle</option>
+              <option value="DEPARTMENT_CREATE">🏢 Dept Create</option>
+              <option value="DEPARTMENT_UPDATE">📋 Dept Update</option>
+              <option value="DEPARTMENT_DELETE">❌ Dept Delete</option>
+              <option value="DEPARTMENT_MEMBER_ADD">👥 Member Assigned</option>
+              <option value="DEPARTMENT_MEMBER_REMOVE">👋 Member Removed</option>
+              <option value="PBAC_POLICY_CREATE">🛡️ PBAC Policy Create</option>
+              <option value="PBAC_POLICY_UPDATE">🛡️ PBAC Policy Update</option>
+              <option value="PBAC_POLICY_DELETE">🛡️ PBAC Policy Delete</option>
+              <option value="ACCESS_CONTROL_UPDATE">🔐 Access Control Update</option>
+              <option value="CREATE_EVENT">📅 Event Create</option>
+              <option value="UPDATE_EVENT">📝 Event Update</option>
+              <option value="DELETE_EVENT">❌ Event Delete</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="filterAuditLogs()" class="px-5 py-2 bg-primary text-white font-bold text-xs rounded-lg hover:bg-emerald-800 transition-colors shadow-2xs">
+              Apply Filters
+            </button>
+            <button onclick="resetAuditFilters()" class="px-3 py-2 text-xs font-semibold text-gray-500 hover:text-gray-800 transition-colors">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-xs">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[760px]">
+              <thead class="bg-slate-50 border-b border-outline-variant text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <tr>
+                  <th class="py-3 px-4 w-44">Timestamp</th>
+                  <th class="py-3 px-4 w-44">Event Type</th>
+                  <th class="py-3 px-4 w-52">User / Actor</th>
+                  <th class="py-3 px-4 w-48">Department</th>
+                  <th class="py-3 px-4">Details</th>
+                  <th class="py-3 px-4 text-right w-24">Action</th>
+                </tr>
+              </thead>
+              <tbody id="auditLogsBody" class="divide-y divide-outline-variant text-xs text-gray-700">
+                <!-- Populated dynamically via renderAuditLogs() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 18. VIEW: DEDICATED CATEGORY MANAGEMENT (ADMIN - STITCH SCREEN d6e1c51306154919b88d6a9433b52c7c) -->
+      <div id="view-admin-categories" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-2xl text-primary">domain</span>
+              <span>Category Management</span>
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">Configure knowledge taxonomy pillars, video allocations, and organizational content categories.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button onclick="openAddCategoryModal()" class="px-4 py-2 bg-primary text-white font-bold text-xs rounded-lg hover:bg-emerald-800 flex items-center gap-1.5 shadow-sm transition-colors">
+              <span class="material-symbols-outlined text-sm">add_circle</span>
+              <span>+ Add Category</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bento Metrics Row (Top) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-5 border border-outline-variant shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Total Categories</div>
+              <div class="text-2xl font-black text-gray-900 mt-1" id="adminCatKpiTotal">18</div>
+              <div class="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 mt-1">
+                <span class="material-symbols-outlined text-xs">check_circle</span> Active taxonomy pillars
+              </div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-primary flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">domain</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-5 border border-outline-variant shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Total Cataloged Videos</div>
+              <div class="text-2xl font-black text-gray-900 mt-1" id="adminCatKpiVideos">0</div>
+              <div class="text-[10px] text-gray-400 mt-1">Across all categories</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">video_library</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-5 border border-outline-variant shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Hero Highlights Pinned</div>
+              <div class="text-2xl font-black text-amber-600 mt-1" id="adminCatKpiFeatured">0 Videos</div>
+              <div class="text-[10px] text-gray-400 mt-1">Pinned to top hero carousel</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">push_pin</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Category Management Table Card -->
+        <div class="bg-white rounded-xl border border-outline-variant shadow-xs overflow-hidden">
+          <!-- Toolbar -->
+          <div class="p-4 border-b border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-3 bg-slate-50/50">
+            <div class="relative w-full sm:w-80">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input id="adminCategorySearchInput" oninput="filterCategoryManagementTable()" type="text" placeholder="Filter categories by name or description..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary outline-none">
+            </div>
+            <div class="text-xs text-gray-400">
+              Showing official enterprise knowledge categories
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse min-w-[800px]">
+              <thead class="bg-slate-50 border-b border-outline-variant text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <tr>
+                  <th class="py-3 px-5">Category Name</th>
+                  <th class="py-3 px-5">Description & Knowledge Scope</th>
+                  <th class="py-3 px-5 text-center">Managed Videos</th>
+                  <th class="py-3 px-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminCategoryTableBody" class="divide-y divide-outline-variant text-xs text-gray-700">
+                <!-- Populated dynamically via renderCategoryManagementTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18. VIEW: DEPARTMENT MANAGEMENT -->
+      <div id="view-admin-depts" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-black text-gray-900 flex items-center gap-2"><span class="material-symbols-outlined text-2xl text-primary">corporate_fare</span><span>Department Management</span></h1>
+            <p class="text-xs text-gray-500 mt-1">Manage organizational departments independently from video Categories and Content Types.</p>
+          </div>
+          <button onclick="openDepartmentModal()" class="px-4 py-2 bg-primary text-white font-bold text-xs rounded-lg hover:bg-emerald-800 flex items-center gap-1.5 shadow-sm"><span class="material-symbols-outlined text-sm">add_circle</span><span>+ Add Department</span></button>
+        </div>
+        <div id="departmentListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 19. VIEW: MEETING RECORDINGS (USER) -->
+      <div id="view-meetings" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Meeting Recordings & Broadcasts</h2>
+            <p class="text-xs text-gray-500 mt-1">Replay executive townhalls, technical symposiums, and internal team meetings.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="filterMeetings('all')" class="meeting-filter-btn px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg">All</button>
+            <button onclick="filterMeetings('Townhall')" class="meeting-filter-btn px-3 py-1.5 bg-white border border-outline-variant text-gray-600 hover:bg-slate-50 text-xs font-medium rounded-lg">Townhalls</button>
+            <button onclick="filterMeetings('R&D')" class="meeting-filter-btn px-3 py-1.5 bg-white border border-outline-variant text-gray-600 hover:bg-slate-50 text-xs font-medium rounded-lg">R&D Reviews</button>
+            <button onclick="filterMeetings('Operations')" class="meeting-filter-btn px-3 py-1.5 bg-white border border-outline-variant text-gray-600 hover:bg-slate-50 text-xs font-medium rounded-lg">Operations</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="meetingsVideoGrid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- 20. VIEW: CATEGORY DETAIL (USER) -->
+      <div id="view-category-detail" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <button onclick="navigateView('categories')" class="p-2 border border-outline-variant bg-white hover:bg-slate-50 text-gray-600 rounded-lg flex items-center justify-center">
+              <span class="material-symbols-outlined text-lg">arrow_back</span>
+            </button>
+            <div>
+              <h2 class="text-2xl font-black text-gray-900" id="catDetailTitle">Category Title</h2>
+              <p class="text-xs text-gray-500 mt-0.5" id="catDetailDesc">Category description...</p>
+            </div>
+          </div>
+          <!-- Grid / List Switcher -->
+          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-outline-variant/60 shrink-0 self-start sm:self-auto">
+            <button id="catViewBtnGrid" onclick="setCategoryDetailLayout('grid')" class="px-3 py-1.5 text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all bg-white text-gray-900 shadow-2xs">
+              <span class="material-symbols-outlined text-sm">grid_view</span>
+              <span>Grid</span>
+            </button>
+            <button id="catViewBtnList" onclick="setCategoryDetailLayout('list')" class="px-3 py-1.5 text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all text-gray-500 hover:text-gray-900">
+              <span class="material-symbols-outlined text-sm">view_list</span>
+              <span>List</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="catDetailVideoGrid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- 21. VIEW: EVENT MANAGEMENT (ADMIN) -->
+      <div id="view-admin-events" class="view-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-gray-900">Event Management</h2>
+            <p class="text-xs text-gray-500 mt-1">Organize technical symposia, schedule live broadcast townhalls, and govern attendee access level.</p>
+          </div>
+          <button onclick="openAddEventModal()" class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">add_circle</span>
+            <span>Create New Event</span>
+          </button>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-primary flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">event</span>
+            </div>
+            <div>
+              <div class="text-[11px] text-gray-500 font-medium">Scheduled Events</div>
+              <div class="text-xl font-black text-gray-900" id="adminEventCount">4 Events</div>
+            </div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">groups</span>
+            </div>
+            <div>
+              <div class="text-[11px] text-gray-500 font-medium">Registered Attendees</div>
+              <div class="text-xl font-black text-gray-900" id="adminEventAttendees">1,880 Total</div>
+            </div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-2xl">live_tv</span>
+            </div>
+            <div>
+              <div class="text-[11px] text-gray-500 font-medium">Broadcast Hours</div>
+              <div class="text-xl font-black text-gray-900">42.5 Hours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Table -->
+        <div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50">
+            <div class="relative flex-1 max-w-sm">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input id="adminEventSearchInput" oninput="filterAdminEventsTable()" type="text" placeholder="Search events by title or speaker..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none">
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="adminEventDeptFilter" onchange="filterAdminEventsTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+                <option value="">All Categories</option>
+              </select>
+              <select id="adminEventStatusFilter" onchange="filterAdminEventsTable()" class="px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none">
+                <option value="">All Statuses</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Live">Live</option>
+                <option value="Past">Past</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-outline-variant">
+                  <th class="py-3 px-4">Event Details</th>
+                  <th class="py-3 px-4">Date & Time</th>
+                  <th class="py-3 px-4">Speaker & Role</th>
+                  <th class="py-3 px-4">Category</th>
+                  <th class="py-3 px-4">Access Scope</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminEventsTableBody" class="divide-y divide-outline-variant text-gray-700">
+                <!-- Populated dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL: EDIT VIDEO ASSET & PERMISSIONS (FULL-SIZE MODAL) -->
+  <div id="edit-modal-wrapper" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto hidden">
+    <div id="edit-drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onclick="closeEditDrawer()"></div>
+    <div id="edit-drawer" class="relative bg-white rounded-2xl shadow-2xl border border-outline-variant max-w-5xl w-full max-h-[92vh] flex flex-col z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant bg-slate-50 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-xl">edit_note</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 text-base">Edit Video Asset & Access Permissions</h3>
+            <p class="text-[11px] text-gray-500">Configure video details, official knowledge category, and Person-Based Access Control (PBAC).</p>
+          </div>
+        </div>
+        <button onclick="closeEditDrawer()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-slate-200 transition-colors">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (2-Column Grid Layout) -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <input type="hidden" id="editDrawerVideoId">
+        <input type="hidden" id="editDrawerVideoUrl">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- LEFT COLUMN: Video Details & Media (7 Cols) -->
+          <div class="lg:col-span-7 space-y-4">
+            
+            <!-- Video Preview & Thumbnail Box -->
+            <div class="space-y-2.5 bg-slate-50 p-4 rounded-xl border border-outline-variant">
+              <div class="flex items-center justify-between text-xs font-bold text-gray-700">
+                <span class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-primary">image</span>
+                  <span>Video Thumbnail Preview</span>
+                </span>
+                <span class="text-gray-400 font-mono text-[11px]">16:9 Aspect Ratio</span>
+              </div>
+
+              <div class="w-full aspect-video rounded-xl bg-slate-900 overflow-hidden relative group border border-slate-700 shadow-xs">
+                <img id="editDrawerThumb" src="" onerror="this.onerror=null; this.src=generateFallbackThumbnail('Video Cover', 'Biotech')" class="w-full h-full object-cover">
+                <div class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded font-bold" id="editDrawerDuration">12:04</div>
+              </div>
+
+              <!-- 2 Sources: Upload File or Capture Frame -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <div>
+                  <input type="file" id="editDrawerThumbFileInput" accept="image/*" class="hidden" onchange="handleThumbnailFileSelect(this, 'editDrawerThumbUrl', 'editDrawerThumb')">
+                  <button type="button" onclick="document.getElementById('editDrawerThumbFileInput').click()" class="w-full py-2 px-3 bg-white border border-slate-300 hover:border-primary hover:bg-emerald-50 rounded-lg text-xs font-bold text-gray-700 flex items-center justify-center gap-1.5 shadow-2xs transition-colors">
+                    <span class="material-symbols-outlined text-sm text-primary">upload_file</span>
+                    <span>Upload File</span>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <input id="editDrawerThumbSec" type="number" min="0" step="1" value="5" placeholder="5" class="w-16 px-2.5 py-1.5 text-xs border border-outline-variant rounded-lg bg-white outline-none font-mono text-center font-bold text-gray-800">
+                  <button type="button" onclick="captureThumbnailFromVideoTime('editDrawerThumbSec', 'editDrawerVideoUrl', 'editDrawerThumbUrl', 'editDrawerThumb')" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1 shadow-2xs transition-colors">
+                    <span class="material-symbols-outlined text-sm">screenshot</span>
+                    <span>Capture Frame</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Thumbnail URL</label>
+                <input id="editDrawerThumbUrl" type="url" oninput="document.getElementById('editDrawerThumb').src = this.value" placeholder="https://..." class="w-full px-3 py-1.5 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-gray-700 bg-white">
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Video Title <span class="text-rose-500">*</span></label>
+              <input id="editDrawerTitle" type="text" class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none font-semibold text-gray-900">
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Description</label>
+              <textarea id="editDrawerDesc" rows="3" class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none resize-none"></textarea>
+            </div>
+
+            <!-- Knowledge Category Only (Content Type Removed) -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Knowledge Category <span class="text-rose-500">*</span></label>
+              <select id="editDrawerCategory" class="w-full px-3 py-2 text-xs border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none font-semibold text-gray-900">
+                <!-- Dynamic 17 options -->
+              </select>
+            </div>
+
+            <!-- Highlights & Display Toggles -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+              <label class="flex items-center justify-between p-3 rounded-xl bg-amber-50/80 border border-amber-200 cursor-pointer hover:bg-amber-50 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-gray-900 flex items-center gap-1">
+                    <span>📌 Hero Highlight Pin</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500">Pin to top hero slideshow banner</div>
+                </div>
+                <input id="editDrawerIsFeatured" type="checkbox" class="w-4 h-4 text-amber-600 rounded border-gray-300 focus:ring-amber-500 cursor-pointer">
+              </label>
+
+              <label class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-gray-800">Archive / Hide</div>
+                  <div class="text-[10px] text-gray-400">Non-admin hide</div>
+                </div>
+                <input id="editDrawerIsHidden" type="checkbox" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer">
+              </label>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Access Permissions & Personnel Selector (5 Cols) -->
+          <div class="lg:col-span-5 space-y-4">
+            
+            <div class="bg-slate-50 border border-outline-variant p-4 rounded-xl space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-800 mb-1.5 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base text-primary">shield_person</span>
+                  <span>Access Control Mode</span>
+                </label>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <label class="flex items-center gap-1.5 p-2 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                    <input type="radio" name="drawerAccessMode" value="public" onchange="toggleDrawerAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                    <span class="font-bold text-gray-800 text-[11px]">🌐 Public</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                    <input type="radio" name="drawerAccessMode" value="include" onchange="toggleDrawerAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                    <span class="font-bold text-gray-800 text-[11px]">👥 Include</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 bg-white border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all">
+                    <input type="radio" name="drawerAccessMode" value="exclude" onchange="toggleDrawerAccessModeUI(this.value)" class="text-primary focus:ring-primary">
+                    <span class="font-bold text-gray-800 text-[11px]">🚫 Exclude</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Person Selector Box for Drawer with Select All -->
+              <div id="drawerPersonSelectorBox" class="hidden space-y-2.5 pt-2 border-t border-outline-variant/60">
+                <div class="flex flex-wrap items-center justify-between gap-1.5 text-[10px]">
+                  <span class="font-bold text-gray-700" id="drawerPersonBoxTitle">Manage Person List:</span>
+                  <div class="flex gap-1">
+                    <button type="button" onclick="selectVipPresetForDrawer()" class="px-2 py-0.5 bg-amber-50 text-amber-800 hover:bg-amber-100 font-bold rounded border border-amber-300">⭐ Add Executive Board</button>
+                    <button type="button" onclick="clearDrawerPersons()" class="px-2 py-0.5 bg-slate-200 hover:bg-slate-300 text-gray-600 rounded">Clear</button>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5">
+                  <input type="text" id="drawerPersonSearchInput" oninput="filterDrawerPersonList(this.value)" placeholder="Search person by name, ID, role..." class="w-full px-2.5 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none">
+                  
+                  <div class="flex items-center gap-1.5">
+                    <select id="drawerDeptFilter" onchange="filterDrawerPersonList()" class="flex-1 px-2 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none">
+                      <option value="">All Departments</option>
+                    </select>
+                    <button type="button" onclick="addDepartmentPersonsForDrawer()" class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-lg text-[10px] shrink-0 border border-emerald-300" title="Add all in department">
+                      + Add Dept
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Select All Toolbar for Drawer -->
+                <div class="flex items-center justify-between px-2.5 py-1.5 bg-slate-100 rounded-lg border border-slate-200 text-xs">
+                  <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none">
+                    <input type="checkbox" id="drawerSelectAllCheckbox" onchange="toggleDrawerSelectAll(this.checked)" class="rounded text-primary focus:ring-primary w-4 h-4 cursor-pointer">
+                    <span>Select All Visible Members (เลือกทั้งหมด)</span>
+                  </label>
+                  <span class="text-[11px] text-gray-500 font-medium" id="drawerVisibleCountText"></span>
+                </div>
+
+                <div id="drawerPersonListContainer" class="max-h-60 overflow-y-auto space-y-1 p-2 bg-white rounded-lg border border-outline-variant divide-y divide-slate-100">
+                  <!-- Populated dynamically via JS -->
+                </div>
+                <div class="text-[11px] text-gray-500 font-semibold" id="drawerSelectedPersonsCountText">Selected: 0 persons</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex items-center justify-between shrink-0">
+        <button onclick="deleteVideoPrompt()" class="px-3.5 py-2 text-rose-600 hover:bg-rose-50 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 border border-rose-200">
+          <span class="material-symbols-outlined text-sm">delete</span>
+          <span>Delete Video</span>
+        </button>
+        <div class="flex gap-2.5">
+          <button onclick="closeEditDrawer()" class="px-4 py-2 border border-outline-variant text-gray-600 text-xs font-semibold rounded-lg hover:bg-slate-200 transition-colors">Cancel</button>
+          <button onclick="saveEditDrawerChanges()" class="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 shadow-sm transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">save</span>
+            <span>Save Changes</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT USER -->
+  <div id="userModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <h3 id="userModalTitle" class="text-base font-bold text-gray-900">Add New User</h3>
+        <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-700"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="modalUserId">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">User ID</label>
+          <input id="modalEmpId" type="text" placeholder="e.g. 0001 (Auto-generated 4 digits if empty)" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Full Name <span class="text-rose-500">*</span></label>
+          <input id="modalName" type="text" placeholder="e.g. Dr. Thanawat Pong" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Corporate Email <span class="text-rose-500">*</span></label>
+          <input id="modalEmail" type="email" placeholder="e.g. thanawat.p@feedtech.com" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block font-bold text-gray-700">Department <span class="text-rose-500">*</span></label>
+            <button type="button" onclick="openDepartmentModal()" class="text-[10px] text-primary font-bold hover:underline flex items-center gap-0.5">
+              <span class="material-symbols-outlined text-xs">tune</span> Manage
+            </button>
+          </div>
+          <select id="modalDept" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+            <!-- Populated dynamically with corporate departments -->
+          </select>
+        </div>
+
+        <!-- Executive Board Checkbox -->
+        <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <input id="modalUserIsExecBoard" type="checkbox" class="w-4 h-4 text-amber-600 rounded border-gray-300 focus:ring-amber-500 cursor-pointer">
+            <label for="modalUserIsExecBoard" class="cursor-pointer">
+              <div class="text-xs font-bold text-amber-900 flex items-center gap-1">
+                <span>⭐ Executive Board Member</span>
+              </div>
+              <div class="text-[10px] text-amber-700">Executive Director / VIP Access (Full access to all videos)</div>
+            </label>
+          </div>
+        </div>
+
+        <input type="hidden" id="modalRole" value="Staff Member">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Role <span class="text-rose-500">*</span></label>
+          <select id="modalRoleSelect" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+            <option value="User">👤 User</option>
+            <option value="Admin">🛡️ Admin</option>
+          </select>
+          <input type="hidden" id="modalLevel" value="Standard">
+        </div>
+      </div>
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end gap-2 text-xs">
+        <button onclick="closeUserModal()" class="px-4 py-2 border border-outline-variant text-gray-600 rounded-lg hover:bg-slate-200">Cancel</button>
+        <button onclick="saveUserModalSubmit()" class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-sm">Save User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CORPORATE DEPARTMENT MANAGEMENT -->
+  <div id="departmentModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-lg">corporate_fare</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">Corporate Department Management</h3>
+            <p class="text-[11px] text-gray-500">Add, view, and organize company departments for employees and access targeting</p>
+          </div>
+        </div>
+        <button onclick="closeDepartmentModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-4 text-xs flex-1">
+        <!-- Add New Department Form -->
+        <div class="p-3.5 bg-slate-50 border border-outline-variant rounded-xl space-y-2.5">
+          <span class="font-bold text-gray-800 text-xs block">+ Add New Department</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input id="newDeptName" type="text" placeholder="Department Name (e.g. Swine Nutrition)" class="w-full px-3 py-1.5 border border-outline-variant rounded-lg bg-white outline-none focus:ring-1 focus:ring-primary font-semibold">
+            <input id="newDeptDesc" type="text" placeholder="Description / Scope" class="w-full px-3 py-1.5 border border-outline-variant rounded-lg bg-white outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div class="flex justify-end pt-1">
+            <button type="button" onclick="saveDepartmentSubmit()" class="px-3.5 py-1.5 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-2xs flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">add</span> Add Department
+            </button>
+          </div>
+        </div>
+
+        <!-- Department List -->
+        <div>
+          <span class="font-bold text-gray-700 text-xs block mb-2">Existing Corporate Departments:</span>
+          <div id="departmentModalListContainer" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end">
+        <button onclick="closeDepartmentModal()" class="px-4 py-2 border border-outline-variant text-gray-700 font-semibold rounded-lg hover:bg-slate-200">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT DEPARTMENT -->
+  <div id="departmentEditModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-xl">edit_note</span>
+          <h3 class="text-sm font-bold text-gray-900">Edit Department</h3>
+        </div>
+        <button onclick="closeEditDepartmentModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-3.5 text-xs">
+        <input type="hidden" id="editDeptId">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Department Name <span class="text-rose-500">*</span></label>
+          <input id="editDeptName" type="text" class="w-full px-3 py-2 border border-outline-variant rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Description / Scope</label>
+          <textarea id="editDeptDesc" rows="3" class="w-full px-3 py-2 border border-outline-variant rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary text-gray-700"></textarea>
+        </div>
+      </div>
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end gap-2">
+        <button onclick="closeEditDepartmentModal()" class="px-3.5 py-1.5 border border-outline-variant text-gray-700 font-semibold rounded-lg hover:bg-slate-200 text-xs">Cancel</button>
+        <button onclick="saveEditDepartmentSubmit()" class="px-4 py-1.5 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-2xs text-xs flex items-center gap-1">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DEPARTMENT MEMBERS INSPECTOR & MANAGEMENT -->
+  <div id="departmentMembersModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-lg">group</span>
+          </div>
+          <div>
+            <h3 id="deptMembersModalTitle" class="text-sm font-bold text-gray-900">Department Members</h3>
+            <p id="deptMembersModalSubtitle" class="text-[11px] text-gray-500">Manage member assignments for this department</p>
+          </div>
+        </div>
+        <button onclick="closeDepartmentMembersModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Add Member Bar -->
+      <div class="p-4 bg-emerald-50/40 border-b border-emerald-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+        <div class="flex-1 flex items-center gap-2">
+          <select id="deptAddMemberSelect" class="flex-1 px-3 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none focus:ring-1 focus:ring-primary font-medium text-gray-800">
+            <option value="">Select user to add to this department...</option>
+          </select>
+          <button onclick="submitAddMemberToDepartment()" class="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800 shrink-0 shadow-2xs flex items-center gap-1">
+            <span class="material-symbols-outlined text-xs">person_add</span>
+            <span>Add Member</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Member List Table -->
+      <div class="p-4 overflow-y-auto flex-1">
+        <div class="border border-outline-variant rounded-xl overflow-hidden">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-slate-50 border-b border-outline-variant text-[11px] font-bold text-gray-400 uppercase">
+              <tr>
+                <th class="py-2.5 px-4">User ID</th>
+                <th class="py-2.5 px-4">Name & Email</th>
+                <th class="py-2.5 px-4">Role</th>
+                <th class="py-2.5 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="deptMembersTableBody" class="divide-y divide-outline-variant text-gray-700">
+              <!-- Populated dynamically via loadDepartmentMembers() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end">
+        <button onclick="closeDepartmentMembersModal()" class="px-4 py-2 border border-outline-variant text-gray-700 font-semibold rounded-lg hover:bg-slate-200 text-xs">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BULK VIDEO IMPORT (CSV) -->
+  <div id="importVideosModal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-xl">upload_file</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">Bulk Video Catalog Ingestion</h3>
+            <p class="text-[11px] text-gray-500">Upload CSV template to batch import 800+ videos at once with auto-thumbnail mapping</p>
+          </div>
+        </div>
+        <button onclick="closeImportVideosModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-4 flex-1 text-xs">
+        <!-- Dropzone / Upload area -->
+        <div id="csvDropZone" class="border-2 border-dashed border-emerald-300 bg-emerald-50/40 hover:bg-emerald-50/80 rounded-2xl p-6 text-center transition-colors cursor-pointer" onclick="document.getElementById('videoCsvFileInput').click()">
+          <input id="videoCsvFileInput" type="file" accept=".csv" class="hidden" onchange="handleVideoCsvFile(event)">
+          <span class="material-symbols-outlined text-4xl text-primary mb-1">cloud_upload</span>
+          <div class="font-bold text-gray-900 text-sm">Click to select or drag & drop CSV file here</div>
+          <div class="text-[11px] text-gray-500 mt-1">Supports standard CSV with headers (title, category, video_url, thumbnail_url, duration, content_type, access_mode)</div>
+          <div class="mt-3 flex items-center justify-center gap-2">
+            <button type="button" onclick="event.stopPropagation(); downloadVideoTemplateCsv()" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">download</span> Need template? Download CSV Template
+            </button>
+          </div>
+        </div>
+
+        <!-- Options Bar -->
+        <div class="p-3 bg-slate-50 border border-outline-variant rounded-xl flex flex-wrap items-center justify-between gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input id="importAutoJpgThumb" type="checkbox" checked class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+            <span class="text-xs font-medium text-gray-700">Auto-map <code>.mp4</code> URLs to same-name <code>.jpg</code> thumbnails</span>
+          </label>
+          <div id="importStatsBadge" class="text-xs font-bold text-gray-600 hidden">
+            Ready to import: <span id="importParsedCount" class="text-primary font-mono text-sm">0</span> videos
+          </div>
+        </div>
+
+        <!-- Preview Table -->
+        <div id="importPreviewContainer" class="hidden space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-gray-800 text-xs">Catalog Preview (First 50 items displayed):</span>
+            <span class="text-[11px] text-gray-400 font-mono" id="importPreviewNotice"></span>
+          </div>
+          <div class="border border-outline-variant rounded-xl overflow-hidden max-h-64 overflow-y-auto">
+            <table class="w-full text-left border-collapse text-[11px]">
+              <thead class="bg-slate-50 sticky top-0 border-b border-outline-variant text-gray-400 font-bold uppercase">
+                <tr>
+                  <th class="py-2 px-3">#</th>
+                  <th class="py-2 px-3">Title</th>
+                  <th class="py-2 px-3">Category</th>
+                  <th class="py-2 px-3">Duration</th>
+                  <th class="py-2 px-3">Access Mode</th>
+                  <th class="py-2 px-3">Thumbnail URL</th>
+                </tr>
+              </thead>
+              <tbody id="importPreviewTableBody" class="divide-y divide-outline-variant text-gray-700 font-mono">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div id="importStatusText" class="text-xs font-medium text-gray-500"></div>
+        <div class="flex items-center gap-2">
+          <button onclick="closeImportVideosModal()" class="px-4 py-2 border border-outline-variant text-gray-700 font-semibold rounded-lg hover:bg-slate-200 text-xs">
+            Cancel
+          </button>
+          <button id="btnStartBatchImport" onclick="executeVideoBatchImport()" disabled class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm text-xs flex items-center gap-1.5 transition-all">
+            <span class="material-symbols-outlined text-sm">rocket_launch</span>
+            <span id="btnStartBatchImportText">Confirm & Import</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: USER VIDEO ACCESS INSPECTOR (ดูว่า User คนนี้ดูคลิปไหนได้บ้าง) -->
+  <div id="userAccessModal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-emerald-100 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-lg">policy</span>
+          </div>
+          <div>
+            <h3 id="userAccessModalTitle" class="text-sm font-bold text-gray-900">User Video Access Inspector</h3>
+            <p id="userAccessModalSubtitle" class="text-[11px] text-gray-500 font-mono">Checking video authorizations...</p>
+          </div>
+        </div>
+        <button onclick="closeUserAccessModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- User Policy Summary Card -->
+      <div class="p-4 bg-emerald-50/50 border-b border-emerald-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div>
+          <span class="text-gray-500">Video Access:</span>
+          <b id="userAccessSummaryRate" class="text-emerald-800 ml-1">21 / 23 Videos Allowed</b>
+        </div>
+        <div id="userAccessPbacBadges" class="flex flex-wrap gap-1">
+          <!-- PBAC Policy Badges -->
+        </div>
+      </div>
+
+      <!-- Videos Access List -->
+      <div class="flex-1 overflow-y-auto p-4 divide-y divide-outline-variant text-xs space-y-2.5" id="userAccessVideosList">
+        <!-- Populated dynamically via inspectUserVideoAccess() -->
+      </div>
+
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end">
+        <button onclick="closeUserAccessModal()" class="px-5 py-1.5 bg-slate-200 hover:bg-slate-300 text-gray-700 font-bold rounded-lg text-xs transition-colors">
+          Close Inspector
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AUDIT LOG DETAILS INSPECTOR -->
+  <div id="logDetailsModal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <h3 id="logDetailsTitle" class="text-sm font-bold text-gray-900 font-mono">Audit Log Details</h3>
+        <button onclick="closeLogDetailsModal()" class="text-gray-400 hover:text-gray-700">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6" id="logDetailsBody">
+        <!-- Log details filled dynamically -->
+      </div>
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end">
+        <button onclick="closeLogDetailsModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-gray-700 font-bold rounded-lg text-xs transition-colors">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VIDEO PLAYER & METADATA -->
+  <div id="videoPlayerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-700">
+      <div class="relative bg-black aspect-video shrink-0 flex items-center justify-center">
+        <video id="activeVideoPlayer" controls autoplay class="w-full h-full object-contain">
+          <source src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <button onclick="closeVideoPlayerModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span id="playerDeptBadge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800">Biotech</span>
+              <span id="playerLevelBadge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-200">Highly Confidential</span>
+              <span id="playerVidCode" class="text-xs text-gray-400 font-medium">VID-8921</span>
+            </div>
+            <h2 id="playerTitle" class="text-xl font-bold text-gray-900 leading-snug">Video Title Placeholder</h2>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="playerFavBtn" onclick="togglePlayerFavorite()" class="px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-50 transition-colors">
+              <span class="material-symbols-outlined text-sm">favorite_border</span>
+              <span id="playerFavText">Favorite</span>
+            </button>
+          </div>
+        </div>
+
+        <p id="playerDesc" class="text-xs text-gray-600 leading-relaxed">Video description goes here...</p>
+
+        <!-- Comments Area -->
+        <div class="pt-4 border-t border-outline-variant space-y-3">
+          <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider">Internal Discussion</h4>
+          <div class="flex gap-2">
+            <input id="newCommentInput" type="text" placeholder="Write an internal comment..." class="flex-1 px-3 py-1.5 text-xs border border-outline-variant rounded-lg outline-none focus:ring-1 focus:ring-primary">
+            <button onclick="submitComment()" class="px-4 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-emerald-800">Post</button>
+          </div>
+          <div id="commentsList" class="space-y-2 max-h-36 overflow-y-auto">
+            <!-- Comments loaded dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: UNIFIED USER PROFILE, PREFERENCES & HELP & ACCESS HUB -->
+  <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-outline-variant animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header / User Profile Banner -->
+      <div class="relative bg-gradient-to-r from-emerald-900 to-teal-800 p-6 text-white shrink-0">
+        <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full p-1.5 transition-colors">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div id="modalProfileAvatar" class="w-16 h-16 rounded-2xl bg-emerald-600 text-white font-black text-2xl flex items-center justify-center shadow-lg border-2 border-white/20 shrink-0">
+              AS
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 id="modalProfileName" class="text-xl font-bold text-white">Dr. Alice Smith</h2>
+                <span id="modalProfileClearanceBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/80 text-white border border-white/20">Authorized Active</span>
+                <span id="modalProfileAdminBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 text-white border border-white/30">👤 View-Only Member</span>
+              </div>
+              <p id="modalProfileEmailDept" class="text-xs text-emerald-100 mt-0.5">a.smith@feedtech.com • Biotech</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex gap-2 mt-6 border-b border-white/20 text-xs font-semibold overflow-x-auto">
+          <button onclick="switchProfileTab('overview')" id="tabBtn-overview" class="profile-tab-btn pb-2 px-3 border-b-2 border-white text-white font-bold flex items-center gap-1.5 shrink-0 transition-colors">
+            <span class="material-symbols-outlined text-sm">badge</span>
+            <span>Profile & Security Access</span>
+          </button>
+          <button onclick="switchProfileTab('preferences')" id="tabBtn-preferences" class="profile-tab-btn pb-2 px-3 border-b-2 border-transparent text-emerald-200 hover:text-white flex items-center gap-1.5 shrink-0 transition-colors">
+            <span class="material-symbols-outlined text-sm">tune</span>
+            <span>Web Preferences & Playback</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Tab Contents) -->
+      <div class="p-6 overflow-y-auto flex-1 text-xs space-y-6 bg-slate-50/50">
+        
+        <!-- Tab 1: Profile & Security Access -->
+        <div id="tabContent-overview" class="profile-tab-content space-y-4">
+          <div class="bg-white p-4 rounded-xl border border-outline-variant shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="text-[11px] text-gray-500 font-medium">User ID</div>
+              <div class="font-mono font-bold text-gray-900 text-sm mt-0.5" id="profileEmpId">0001</div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="text-[11px] text-gray-500 font-medium">Department</div>
+              <div class="font-bold text-gray-900 text-sm mt-0.5" id="profileDept">R&D</div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="text-[11px] text-gray-500 font-medium">Accessible Videos</div>
+              <div class="font-bold text-emerald-700 text-sm mt-0.5" id="profileVidCount">10 / 10</div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="text-[11px] text-gray-500 font-medium">Admin Rights</div>
+              <div class="font-bold text-gray-900 text-sm mt-0.5" id="profileAdminStatus">View-Only</div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm space-y-3">
+            <h4 class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-primary text-sm">shield_person</span>
+              Access Governance & Security Policy
+            </h4>
+            <p class="text-gray-500 text-[11px] leading-relaxed">
+              Video access is governed on a per-video policy basis (Person-Based Access Control - PBAC). Public videos are accessible across the enterprise, while confidential assets require explicit inclusion or executive board clearance.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 2: Web Preferences & Playback -->
+        <div id="tabContent-preferences" class="profile-tab-content hidden space-y-4">
+          <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm space-y-4">
+            <h4 class="font-bold text-gray-900 text-xs uppercase tracking-wider">Video Streaming & Playback</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="col-span-full border-b border-slate-100 pb-3 mb-2">
+                <label class="block font-bold text-gray-800 mb-1">Language</label>
+                <div class="flex items-center gap-3">
+                  <select id="prefLanguageSelect" onchange="setPortalLanguage(this.value)" class="w-full sm:w-64 px-3 py-2 border border-outline-variant rounded-lg bg-white outline-none font-semibold text-gray-800 text-xs">
+                    <option value="en">English (Default)</option>
+                    <option value="th">Thai (ภาษาไทย)</option>
+                  </select>
+                  <span class="text-[11px] text-gray-400">Switch user interface language.</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">Default Streaming Resolution</label>
+                <select class="w-full px-3 py-2 border border-outline-variant rounded-lg bg-white outline-none">
+                  <option>Auto (Adaptive 1080p / 4K)</option>
+                  <option>1080p Full HD (Recommended)</option>
+                  <option>720p HD (Low Bandwidth)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">Theme</label>
+                <select id="prefThemeSelect" onchange="setPortalTheme(this.value)" class="w-full px-3 py-2 border border-outline-variant rounded-lg bg-white outline-none font-semibold text-gray-800 text-xs">
+                  <option value="light">☀️ Light Mode</option>
+                  <option value="dark">🌙 Dark Mode</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <div>
+                <div class="font-bold text-gray-800">Autoplay Next Video</div>
+                <div class="text-[11px] text-gray-400">Automatically start the next related video in playlist.</div>
+              </div>
+              <input type="checkbox" checked class="w-4 h-4 text-primary rounded focus:ring-primary">
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex justify-end">
+              <button onclick="showToast('Web preferences saved successfully', 'success')" class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-sm">
+                Save Preferences
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD / EDIT CATEGORY -->
+  <div id="categoryModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[90vh]">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg">category</span>
+          </div>
+          <div>
+            <h3 id="categoryModalTitle" class="text-base font-bold text-gray-900">Add Category</h3>
+            <p class="text-[11px] text-gray-500">Define category name and select an icon</p>
+          </div>
+        </div>
+        <button onclick="closeCategoryModal()" class="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs overflow-y-auto flex-1">
+        <input type="hidden" id="modalCatId">
+        <input type="hidden" id="modalCatIcon" value="domain">
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Category Name <span class="text-rose-500">*</span></label>
+          <input id="modalCatName" type="text" placeholder="e.g. Swine Health & Nutrition, Biotechnology, QC-Lab" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+        </div>
+
+        <!-- Visual Icon Selector with Preset Grid + Custom Upload -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-gray-700">Category Icon <span class="text-rose-500">*</span></label>
+            <!-- Live Preview Badge -->
+            <div class="flex items-center gap-2 bg-slate-50 px-2.5 py-1 rounded-lg border border-outline-variant">
+              <span class="text-[10px] text-gray-500 font-medium">Icon Preview:</span>
+              <div id="catIconPreviewBox" class="w-7 h-7 rounded-md bg-emerald-100 text-primary flex items-center justify-center overflow-hidden font-bold">
+                <span id="catIconPreviewSymbol" class="material-symbols-outlined text-base">domain</span>
+                <img id="catIconPreviewImg" src="" class="w-full h-full object-contain hidden" alt="preview">
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-outline-variant rounded-xl p-3 bg-slate-50/50 space-y-3">
+            <div class="text-[11px] font-bold text-gray-600 flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm text-primary">apps</span>
+              <span>Choose from preset icons:</span>
+            </div>
+            
+            <!-- Preset Icon Grid (18 icons) -->
+            <div id="presetCatIconGrid" class="grid grid-cols-6 gap-2">
+              <button type="button" onclick="selectPresetCatIcon('domain')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Domain / General">
+                <span class="material-symbols-outlined text-xl">domain</span>
+                <span class="text-[9px] truncate max-w-full">General</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('biotech')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Biotech">
+                <span class="material-symbols-outlined text-xl">biotech</span>
+                <span class="text-[9px] truncate max-w-full">Biotech</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('science')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Science / Lab">
+                <span class="material-symbols-outlined text-xl">science</span>
+                <span class="text-[9px] truncate max-w-full">Science</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('agriculture')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Agriculture">
+                <span class="material-symbols-outlined text-xl">agriculture</span>
+                <span class="text-[9px] truncate max-w-full">Agri</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('pest_control')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Swine / Livestock">
+                <span class="material-symbols-outlined text-xl">pest_control</span>
+                <span class="text-[9px] truncate max-w-full">Swine</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('egg')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Poultry / Layers">
+                <span class="material-symbols-outlined text-xl">egg</span>
+                <span class="text-[9px] truncate max-w-full">Poultry</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('set_meal')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Aquatic / Fish">
+                <span class="material-symbols-outlined text-xl">set_meal</span>
+                <span class="text-[9px] truncate max-w-full">Aquatic</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('cruelty_free')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Ruminant / Dairy">
+                <span class="material-symbols-outlined text-xl">cruelty_free</span>
+                <span class="text-[9px] truncate max-w-full">Ruminant</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('precision_manufacturing')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Manufacturing / Mill Operations">
+                <span class="material-symbols-outlined text-xl">precision_manufacturing</span>
+                <span class="text-[9px] truncate max-w-full">Mill Ops</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('local_shipping')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Supply Chain & Logistics">
+                <span class="material-symbols-outlined text-xl">local_shipping</span>
+                <span class="text-[9px] truncate max-w-full">Logistics</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('security')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Quality Assurance / QA">
+                <span class="material-symbols-outlined text-xl">security</span>
+                <span class="text-[9px] truncate max-w-full">QA</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('eco')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Sustainability & ESG">
+                <span class="material-symbols-outlined text-xl">eco</span>
+                <span class="text-[9px] truncate max-w-full">Eco</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('smart_toy')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="IoT / Automation">
+                <span class="material-symbols-outlined text-xl">smart_toy</span>
+                <span class="text-[9px] truncate max-w-full">IoT</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('pets')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Pet Food Science">
+                <span class="material-symbols-outlined text-xl">pets</span>
+                <span class="text-[9px] truncate max-w-full">Pet Food</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('verified_user')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Compliance & Audit">
+                <span class="material-symbols-outlined text-xl">verified_user</span>
+                <span class="text-[9px] truncate max-w-full">Audit</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('coronavirus')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Biosecurity">
+                <span class="material-symbols-outlined text-xl">coronavirus</span>
+                <span class="text-[9px] truncate max-w-full">Biosecure</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('psychology')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Innovation & R&D">
+                <span class="material-symbols-outlined text-xl">psychology</span>
+                <span class="text-[9px] truncate max-w-full">Innovate</span>
+              </button>
+              <button type="button" onclick="selectPresetCatIcon('campaign')" class="preset-icon-btn p-2 rounded-lg border border-outline-variant bg-white hover:border-primary hover:bg-emerald-50 text-gray-700 flex flex-col items-center gap-1 transition-all" title="Broadcast & Notice">
+                <span class="material-symbols-outlined text-xl">campaign</span>
+                <span class="text-[9px] truncate max-w-full">Broadcast</span>
+              </button>
+            </div>
+
+            <!-- Custom Upload Divider -->
+            <div class="relative flex py-1 items-center">
+              <div class="flex-grow border-t border-outline-variant"></div>
+              <span class="flex-shrink mx-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider">Or upload custom icon</span>
+              <div class="flex-grow border-t border-outline-variant"></div>
+            </div>
+
+            <!-- Custom Upload & URL Input -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-gray-600 mb-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-primary">upload_file</span>
+                  <span>Upload image (PNG/SVG/JPG)</span>
+                </label>
+                <input type="file" id="modalCatIconFile" accept="image/*" onchange="handleCustomCatIconUpload(event)" class="w-full text-[11px] file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-primary file:text-white hover:file:bg-emerald-800 cursor-pointer border border-outline-variant rounded-lg bg-white p-1">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-gray-600 mb-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-primary">link</span>
+                  <span>Or Image URL</span>
+                </label>
+                <input type="text" id="modalCatIconUrl" oninput="handleCatIconUrlInput(this.value)" placeholder="https://example.com/icon.svg" class="w-full px-2.5 py-1.5 text-xs bg-white border border-outline-variant rounded-lg outline-none focus:ring-1 focus:ring-primary font-mono text-gray-700">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Description</label>
+          <textarea id="modalCatDesc" rows="3" placeholder="Describe scope, purpose, or knowledge areas in this category..." class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary resize-none text-gray-800"></textarea>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end gap-2 text-xs shrink-0">
+        <button onclick="closeCategoryModal()" class="px-4 py-2 border border-outline-variant text-gray-600 font-semibold rounded-lg hover:bg-slate-200 transition-colors">Cancel</button>
+        <button onclick="saveCategoryModalSubmit()" class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-sm transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">save</span>
+          <span>Save Category</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD / EDIT EVENT (ADMIN) -->
+  <div id="eventModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <h3 id="eventModalTitle" class="text-base font-bold text-gray-900">Create New Event</h3>
+        <button onclick="closeEventModal()" class="text-gray-400 hover:text-gray-700"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="p-6 space-y-4 text-xs max-h-[75vh] overflow-y-auto">
+        <input type="hidden" id="modalEventId">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Event Title <span class="text-rose-500">*</span></label>
+          <input id="modalEventTitle" type="text" placeholder="e.g. Swine Health & Precision Nutrition Symposium 2026" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold text-gray-900">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Date <span class="text-rose-500">*</span></label>
+            <input id="modalEventDate" type="date" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-mono">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Time Range</label>
+            <input id="modalEventTime" type="text" placeholder="e.g. 09:00 - 16:30 ICT" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Location / Broadcast Venue <span class="text-rose-500">*</span></label>
+          <input id="modalEventLocation" type="text" placeholder="e.g. Bangkok Headquarter & Live Stream" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Keynote Speaker</label>
+            <input id="modalEventSpeaker" type="text" placeholder="e.g. Dr. Somchai Rattana" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Speaker Role</label>
+            <input id="modalEventSpeakerRole" type="text" placeholder="e.g. Head of Swine Veterinary R&D" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Organizing Department</label>
+            <select id="modalEventDept" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+              <!-- Populated dynamically with departments -->
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Category</label>
+            <select id="modalEventCategory" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary">
+              <!-- Populated dynamically with categories -->
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Access Scope</label>
+            <select id="modalEventLevel" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold">
+              <option value="Standard">Public (Open for All)</option>
+              <option value="Restricted">Restricted (Internal)</option>
+              <option value="Highly Confidential">Confidential (Executive/R&D)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Status</label>
+            <select id="modalEventStatus" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary font-semibold">
+              <option value="Upcoming">Upcoming</option>
+              <option value="Live">Live</option>
+              <option value="Past">Past</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Description</label>
+          <textarea id="modalEventDesc" rows="3" placeholder="Overview of the event, agenda topics, and intended audience..." class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Banner Image URL</label>
+            <input id="modalEventBannerUrl" type="url" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none font-mono text-[11px]">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Video Stream / Replay URL</label>
+            <input id="modalEventVideoUrl" type="url" placeholder="https://.../video.mp4" class="w-full px-3 py-2 border border-outline-variant rounded-lg outline-none font-mono text-[11px]">
+          </div>
+        </div>
+      </div>
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-end gap-2 text-xs">
+        <button onclick="closeEventModal()" class="px-4 py-2 border border-outline-variant text-gray-600 rounded-lg hover:bg-slate-200">Cancel</button>
+        <button onclick="saveEventModalSubmit()" class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-emerald-800 shadow-sm">Save Event</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CATEGORY VIDEO BREAKDOWN (DRILL-DOWN FOR ADMIN DASHBOARD) -->
+  <div id="categoryDrilldownModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full border border-outline-variant shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-outline-variant bg-slate-50 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-xl">insights</span>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+              <span id="drilldownCategoryTitle">Category Video Breakdown</span>
+              <span id="drilldownCategoryBadge" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">Active</span>
+            </h3>
+            <p class="text-xs text-gray-500 mt-0.5" id="drilldownCategorySubtitle">Detailed metrics, video inventory, and audience consumption audit</p>
+          </div>
+        </div>
+        <button onclick="closeCategoryDrilldownModal()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-full hover:bg-slate-200">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Quick KPI Stats Bar -->
+      <div class="grid grid-cols-2 divide-x divide-outline-variant border-b border-outline-variant bg-white text-xs">
+        <div class="p-4 text-center">
+          <span class="text-gray-400 block mb-0.5">Total Videos</span>
+          <span id="drilldownTotalVideos" class="text-lg font-black text-gray-900">0 Videos</span>
+        </div>
+        <div class="p-4 text-center">
+          <span class="text-gray-400 block mb-0.5">Aggregate Views</span>
+          <span id="drilldownTotalViews" class="text-lg font-black text-primary">0 Views</span>
+        </div>
+      </div>
+
+      <!-- Modal Body (Table of Videos in Category) -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-4 text-xs">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-gray-900 text-sm">Indexed Videos in this Category</h4>
+          <span class="text-gray-400 text-xs" id="drilldownTableSummary">Showing all videos</span>
+        </div>
+
+        <div class="border border-outline-variant rounded-xl overflow-hidden shadow-xs">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-outline-variant">
+                <th class="py-3 px-4">Video Asset</th>
+                <th class="py-3 px-4">Duration & Uploaded</th>
+                <th class="py-3 px-4 text-center">Views</th>
+                <th class="py-3 px-4">Access Mode & Permissions</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="drilldownTableBody" class="divide-y divide-outline-variant text-gray-700">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-outline-variant bg-slate-50 flex justify-between items-center text-xs">
+        <span class="text-gray-400">💡 Click any video to preview or edit individual access whitelist</span>
+        <button onclick="closeCategoryDrilldownModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 font-bold text-gray-700 rounded-lg">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Application Modular Scripts -->
+  <script src="/js/state.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script src="/js/videos.js"></script>
+  <script src="/js/categories.js"></script>
+  <script src="/js/tags.js"></script>
+  <script src="/js/admin.js"></script>
+  <script src="/js/figma-showcase.js"></script>
+  <script>window.__FORCE_FIGMA_MODE__ = true;</script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
